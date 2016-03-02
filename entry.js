@@ -10,4 +10,4 @@ require('./node_modules/firebase/lib/firebase-web');
 require('./node_modules/reactfire/dist/reactfire.min');
 
 //app.js
-require('./js/app');
+require('./app/js/app');

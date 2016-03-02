@@ -5,10 +5,12 @@ module.exports = {
         filename: "[name].bundle.js",
         chunkFilename: "[id].bundle.js"
     },
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
     module: {
         loaders: [
-            {test: /\.jsx?$/, loaders: ['jsx?harmony']}
-            //{test: /\.css$/, loader: "style!css"}
+            {test: /\.js|jsx$/, loaders: ['jsx-loader']}
         ]
     }
 };
