@@ -1,32 +1,21 @@
-/**
- * Created by YouHan on 2016/2/28.
- */
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactBootstrap = require('react-bootstrap');
 
-//ReactDOM.render(<h1>Hello, world!</h1>,);
-
-
-//var button = ReactBootstrap.Button({
-//    bsStyle: "success",
-//    bsSize: "large",
-//    children: "Register"
-//});
-
 
 var CommentBox = React.createClass({
+    displayName: 'CommentBox',
     render: function () {
         return (
-            <div className="commentBox">
-                Hello, world! I am a CommentBox.
-            </div>
+            React.createElement('div', {
+                    className: 'commentBox'
+                },
+                "Hello, world! I am a CommentBox."
+            )
         );
     }
 });
-
 ReactDOM.render(
-    //<h1>Hello, world!</h1>,
-    <CommentBox />,
+    React.createElement(CommentBox, null),
     document.getElementById('example')
 );
