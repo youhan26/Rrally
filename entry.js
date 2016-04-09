@@ -9,5 +9,8 @@ require('./node_modules/react-bootstrap/dist/react-bootstrap.min');
 require('./node_modules/firebase/lib/firebase-web');
 require('./node_modules/reactfire/dist/reactfire.min');
 
+//marked
+require('./node_modules/marked/marked.min');
+
 //app.js
 require('./app/js/app');
