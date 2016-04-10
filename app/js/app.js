@@ -3,11 +3,19 @@ var ReactDOM = require('react-dom');
 var ReactBootstrap = require('react-bootstrap');
 var marked = require('marked');
 
+// tutorial10.js
 var CommentList = React.createClass({
     render: function () {
+        var commentNodes = this.props.data.map(function (comment) {
+            return (
+                <Comment author={comment.author} key={comment.id}>
+                    {comment.text}
+                </Comment>
+            );
+        });
         return (
             <div className="commentList">
-                Hello, world! I am a CommentList.
+                {commentNodes}
             </div>
         );
     }
@@ -48,10 +56,18 @@ var CommentBox = React.createClass({
             <div className="commentBox">
                 <Comment author="Pete Hunt">This is one comment</Comment>
                 <Comment author="Jordan Walke">This is *another* comment</Comment>
-                <CommentList />
+                <CommentList data={data}/>
                 <CommentForm />
             </div>
         );
     }
 });
-ReactDOM.render(React.createElement(CommentBox, null), document.getElementById('example'));
+
+// tutorial8.js
+var data = [
+    {id: 1, author: "Pete Hunt", text: "This is one comment"},
+    {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+];
+var el = document.getElementById('example');
+
+ReactDOM.render(React.createElement(CommentBox, null), el);
