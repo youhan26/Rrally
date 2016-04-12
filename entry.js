@@ -2,6 +2,7 @@
  * Created by YouHan on 2016/2/28.
  */
 // react
+'use strict';
 require('./node_modules/react/react');
 require('./node_modules/react-bootstrap/dist/react-bootstrap.min');
 
@@ -14,3 +15,4 @@ require('./node_modules/marked/marked.min');
 
 //app.js
 require('./app/js/app');
+require('./app/js/todoList');
