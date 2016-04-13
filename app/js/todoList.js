@@ -5,6 +5,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var firebase = require('firebase');
+
 
 var List = React.createClass({
     displayName: 'list',
@@ -29,16 +31,28 @@ var TodoList = React.createClass({
             text: ''
         }
     },
+    componentWillMount: function () {
+        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com/todoList');
+        this.firebaseRef.on("child_added", function (data) {
+            this.state.items.push(data.val());
+            this.setState({
+                items: this.state.items
+            });
+        }.bind(this));
+    },
+    componentWillUnmount: function () {
+        this.firebaseRef.off();
+    },
     submit: function (e) {
         e.preventDefault();
-        this.state.items.push({
+        var date = new Date();
+        this.firebaseRef.push({
             name: this.state.text,
-            key: new Date()
+            key: new Date().getTime().toString()
         });
         this.state.text = '';
         this.setState({
-            text: this.state.text,
-            items: this.state.items
+            text: this.state.text
         });
     },
     textChange: function (e) {
