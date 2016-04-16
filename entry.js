@@ -16,3 +16,4 @@ require('./node_modules/marked/marked.min');
 //app.js
 require('./app/js/app');
 require('./app/js/todoList');
+require('./app/js/story');
