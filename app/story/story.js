@@ -51,7 +51,7 @@ var StoryStatus = React.createClass({
 
 
 var schedule = {
-    state: 'schedule state',
+    state: 'schedule state'
 };
 var story = {
     state: 'developing',
