@@ -8,5 +8,5 @@ require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
 
 //app.js
 require('./../app/carousel');
-// require('./app/js/todoList');
+require('./../app/todoList');
 // require('./../app/story/story');
