@@ -7,40 +7,42 @@
 </head>
 <body>
 
-<div id="carousel">
-    <figure id="spinner">
-        <img src="./app/image/1.jpg" alt="">
-        <img src="./app/image/2.jpg" alt="">
-        <img src="./app/image/3.jpg" alt="">
-        <img src="./app/image/4.jpg" alt="">
-        <img src="./app/image/5.jpg" alt="">
-        <img src="./app/image/6.jpg" alt="">
-        <img src="./app/image/7.jpg" alt="">
-        <img src="./app/image/8.jpg" alt="">
-    </figure>
-</div>
-<span style="float:left;" class="ss-icon" onclick="galleryspin('-')">&lt;</span>
-<span style="float:right;" class="ss-icon" onclick="galleryspin()">&gt;</span>
+<!--<div id="carousel">-->
+<!--<figure id="spinner">-->
+<!--<img src="./app/image/1.jpg" alt="">-->
+<!--<img src="./app/image/2.jpg" alt="">-->
+<!--<img src="./app/image/3.jpg" alt="">-->
+<!--<img src="./app/image/4.jpg" alt="">-->
+<!--<img src="./app/image/5.jpg" alt="">-->
+<!--<img src="./app/image/6.jpg" alt="">-->
+<!--<img src="./app/image/7.jpg" alt="">-->
+<!--&lt;!&ndash;<img src="./app/image/8.jpg" alt="">&ndash;&gt;-->
+<!--</figure>-->
+<!--</div>-->
+<!--<span style="float:left;" class="ss-icon" onclick="galleryspin('-')">&lt;</span>-->
+<!--<span style="float:right;" class="ss-icon" onclick="galleryspin()">&gt;</span>-->
 
-<script>
-    var angle = 0;
-    function galleryspin(sign) {
-        spinner = document.querySelector("#spinner");
-        if (!sign) {
-            angle = angle + 45;
-        } else {
-            angle = angle - 45;
-        }
-        spinner.setAttribute("style", "-webkit-transform: rotateY(" + angle + "deg); -moz-transform: rotateY(" + angle + "deg); transform: rotateY(" + angle + "deg);");
-    }
-</script>
+<!--<script>-->
+<!--var angle = 0;-->
+<!--function galleryspin(sign) {-->
+<!--spinner = document.querySelector("#spinner");-->
+<!--if (!sign) {-->
+<!--angle = angle + 45;-->
+<!--} else {-->
+<!--angle = angle - 45;-->
+<!--}-->
+<!--spinner.setAttribute("style", "-webkit-transform: rotateY(" + angle + "deg); -moz-transform: rotateY(" + angle + "deg); transform: rotateY(" + angle + "deg);");-->
+<!--}-->
+<!--</script>-->
 
 
-<div id="example"></div>
-<div id="todoList"></div>
+<!--<div id="example"></div>-->
 
-<a href="./app/story/story.html"> Story Page</a>
-<a href="./app/utils/index.html"> Utils Page </a>
+<ul>
+    <li><a href="app/story/storyList.html"> Story Page</a></li>
+    <li><a href="./app/utils/index.html"> Utils Page </a></li>
+    <li><a href="./app/backlog/backlog.html"> Backlog Page </a></li>
+</ul>
 
 <script src="./bundle/main.bundle.js"></script>
 </body>

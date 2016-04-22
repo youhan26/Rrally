@@ -4,9 +4,7 @@
 'use strict';
 var React = require('react');
 var ReactDOM = require('react-dom');
-
-var firebase = require('firebase');
-
+var Firebase = require('firebase');
 
 var List = React.createClass({
     displayName: 'list',
@@ -32,7 +30,7 @@ var TodoList = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com/todoList');
+        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com/todoList');
         this.firebaseRef.on("child_added", function (data) {
             this.state.items.push(data.val());
             this.setState({
@@ -74,7 +72,7 @@ var TodoList = React.createClass({
 });
 
 
-var el = document.getElementById('todoList');
+var el = document.getElementById('backlog');
 
 ReactDOM.render(React.createElement(TodoList, null), el);
 
