@@ -54,28 +54,47 @@ var StoryList = React.createClass({
     componentWillUnmount: function () {
         this.firebaseRef.off();
     },
+    onEdit: function () {
+        console.log('on Edit', arguments);
+    },
+    renderLi: function (item) {
+        return (
+            <StoryItem onEdit={this.onEdit} story={item} key={item.id}></StoryItem>
+        );
+    },
     render: function () {
-        function renderLi(item) {
-            return (
-                <li key={item.id}>
-                    <section>
-                        <h3>{item.basic.name}</h3>
-                        <h4>Desc:</h4>
-                        {item.basic.desc}
-                        <h4>Note :</h4>
-                        {item.basic.note}
-
-                        <label>Plan Est:</label>{item.status.planEst}
-                        <label>Task Est:</label>{item.status.taskEst}
-                        <label>TODO:</label>{item.status.todo}
-                    </section>
-                </li>
-            );
-        }
-
         return (
             <div>
-                <ul>{this.state.items.map(renderLi)}</ul>
+                <ul>{this.state.items.map(this.renderLi)}</ul>
+            </div>
+        )
+    }
+});
+
+var StoryItem = React.createClass({
+    goEditPage: function () {
+        var data = this.props.story;
+        if (data.storyId) {
+            window.open("story.html?id=" + data.storyId, '_blank');
+        }
+    },
+    render: function () {
+        return (
+            <div>
+                <li>
+                    <section>
+                        <h3>{this.props.story.basic.name}</h3>
+                        <h4>Desc:</h4>
+                        {this.props.story.basic.desc}
+                        <h4>Note :</h4>
+                        {this.props.story.basic.note}
+
+                        <label>Plan Est:</label>{this.props.story.status.planEst}
+                        <label>Task Est:</label>{this.props.story.status.taskEst}
+                        <label>TODO:</label>{this.props.story.status.todo}
+                        <button onClick={this.goEditPage}>编辑</button>
+                    </section>
+                </li>
             </div>
         )
     }

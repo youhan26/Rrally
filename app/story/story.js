@@ -47,7 +47,7 @@ var StorySchedule = React.createClass({
                         <option value="dsplug">DSPLUG</option>
                         <option value="social">DSPLUG-social</option>
                     </select>
-                    <label>Iteration : </label>
+                    <label>Iteration :</label>
                     <input value={this.props.schedule.iteration} onChange={this.handleChange}
                            ref="iteration"/>
                     <label>Release : </label>
@@ -148,6 +148,7 @@ var StoryBasic = React.createClass({
 var Story = React.createClass({
     displayName: 'story',
     getInitialState: function () {
+
         return {
             story: {
                 basic: {
@@ -173,9 +174,9 @@ var Story = React.createClass({
             story: {
                 basic: this.state.story.basic,
                 status: {
-                    planEst: plan,
-                    taskEst: task,
-                    todo: todo
+                    planEst: parseInt(plan),
+                    taskEst: parseInt(task),
+                    todo: parseInt(todo)
                 },
                 schedule: this.state.story.schedule
             }
@@ -223,11 +224,12 @@ var Story = React.createClass({
         data.id = new Date().getTime().toString();
         this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
             var index = snap.val()['storyIndex'];
+            var storyId = 'STORY0' + index;
             //update index
             this.indexRef.child('storyIndex').set(parseInt(index) + 1);
+            data.storyId = storyId;
 
-            //set data for save
-            this.firebaseRef.child(data.storyId).set(data, function (error) {
+            this.firebaseRef.child(storyId).set(data, function (error) {
                 if (!error) {
                     //TODO list page
                     console.log('save succ!');
