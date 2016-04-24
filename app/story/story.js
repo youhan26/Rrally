@@ -246,16 +246,15 @@ var Story = React.createClass({
                     temp.setState({
                         story: data
                     });
+                    //change url without refresh page
+                    window.history.pushState('', 'Edit ' + data.storyId, window.location.href + '?id=' + data.storyId);
                 });
-                console.log(this.state.story);
             }.bind(this));
         }
 
         function saveData(me, data, cb) {
             me.firebaseRef.child(data.storyId).set(data, function (error) {
                 if (!error) {
-                    //TODO list page
-
                     if (cb) {
                         cb();
                     }

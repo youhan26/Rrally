@@ -88,10 +88,11 @@ var StoryItem = React.createClass({
                         {this.props.story.basic.desc}
                         <h4>Note :</h4>
                         {this.props.story.basic.note}
+                        <br/>
 
-                        <label>Plan Est:</label>{this.props.story.status.planEst}
-                        <label>Task Est:</label>{this.props.story.status.taskEst}
-                        <label>TODO:</label>{this.props.story.status.todo}
+                        <label>Plan Est:</label>{this.props.story.status.planEst}&nbsp;
+                        <label>Task Est:</label>{this.props.story.status.taskEst}&nbsp;
+                        <label>TODO:</label>{this.props.story.status.todo}&nbsp;
                         <button onClick={this.goEditPage}>编辑</button>
                     </section>
                 </li>
