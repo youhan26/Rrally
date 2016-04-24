@@ -230,7 +230,7 @@ var Story = React.createClass({
             alert('must need name');
             return;
         }
-        if (this.storyId) {
+        if (data.storyId) {
             saveData(this, data)
         } else {
             data.id = new Date().getTime().toString();
@@ -240,16 +240,28 @@ var Story = React.createClass({
                 //update index
                 this.indexRef.child('storyIndex').set(parseInt(index) + 1);
                 data.storyId = storyId;
-                saveData(this, data);
+                var temp = this;
+
+                saveData(this, data, function () {
+                    temp.setState({
+                        story: data
+                    });
+                });
+                console.log(this.state.story);
             }.bind(this));
         }
 
-        function saveData(me, data) {
+        function saveData(me, data, cb) {
             me.firebaseRef.child(data.storyId).set(data, function (error) {
                 if (!error) {
                     //TODO list page
+
+                    if (cb) {
+                        cb();
+                    }
                     console.log('save succ!');
                 } else {
+                    delete me.storyId;
                     alert('save fail! please to check on console');
                     console.log('error happen when ')
                 }
