@@ -8,13 +8,13 @@ require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
 
 //firebase
 require('./../node_modules/firebase/lib/firebase-web');
-// require('./../node_modules/reactfire/dist/reactfire.min.js');
 
 //marked
 require('./../node_modules/marked/marked.min.js');
 
+//material ui
+// require('./../node_modules/material-ui/lib/tabs');
+
 //app.js
-// require('./app/js/app');
-// require('./app/js/todoList');
 require('./../app/story/story');
 require('./../app/story/storyList');

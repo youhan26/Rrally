@@ -24,9 +24,11 @@
   "dependencies": {
     "firebase": "^2.4.1",
     "marked": "^0.3.5",
+    "material-ui": "^0.14.4",
     "react": "^15.0.1",
     "react-bootstrap": "^0.29.0",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "react-tap-event-plugin": "^0.2.2"
   },
   "devDependencies": {
     "eslint": "^2.7.0",

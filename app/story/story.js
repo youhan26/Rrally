@@ -5,6 +5,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var firebase = require('firebase');
+var BS = require('react-bootstrap');
+var Tab = BS.Tab;
+var Tabs = BS.Tabs;
+var ListGroup = BS.ListGroup;
+var ListGroupItem = BS.ListGroupItem;
 
 /**
  * attachments will support the upload all kinds of file function.
@@ -125,10 +130,12 @@ var StoryBasic = React.createClass({
         };
         return (
             <div>
-                <section>
+                <form>
                     <labe>Story Name:</labe>
                     <input ref="name" onChange={this.handleChange} value={this.props.basic.name}/>
-                    <button onClick={this.click}>{this.props.id ? 'Edit Story' : 'Create Story'}</button>
+                    <BS.Button onClick={this.click} bsStyle="primary" bsSize="small">
+                        {this.props.id ? 'Edit Story' : 'Create Story'}
+                    </BS.Button>
 
                     <h3>Description:</h3>
                     <textarea row="10" ref="desc" onChange={this.handleChange}
@@ -136,7 +143,7 @@ var StoryBasic = React.createClass({
                     <h3>Notes:</h3>
                     <textarea row="10" ref="note" onChange={this.handleChange}
                               value={this.props.basic.note} style={textStyle}></textarea>
-                </section>
+                </form>
             </div>
         )
     }
@@ -269,22 +276,197 @@ var Story = React.createClass({
 
     },
     render: function () {
-
         return (
             <div>
-                <StoryBasic onCreate={this.create} basicChange={this.basicChange}
-                            basic={this.state.story.basic} id={this.state.story.id}>
-                </StoryBasic>
-                <Attachments></Attachments>
-                <StorySchedule schedule={this.state.story.schedule}
-                               scheduleChange={this.scheduleChange}>
-                </StorySchedule>
-                <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
-                </StoryStatus>
+                <Tabs defaultActiveKey={1} id="storyTabs">
+                    <Tab eventKey={1} title="Story">
+                        <BS.Well>
+                            <StoryBasic onCreate={this.create} basicChange={this.basicChange}
+                                        basic={this.state.story.basic} id={this.state.story.id}>
+                            </StoryBasic>
+                        </BS.Well>
+                        <Attachments></Attachments>
+                        <BS.Well>
+                            <StorySchedule schedule={this.state.story.schedule}
+                                           scheduleChange={this.scheduleChange}>
+                            </StorySchedule>
+                        </BS.Well>
+                        <BS.Well>
+                            <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
+                            </StoryStatus>
+                        </BS.Well>
+                    </Tab>
+                    <Tab eventKey={2} title="Task">
+                        <Task storyId={this.state.story.storyId}></Task>
+                    </Tab>
+                    <Tab eventKey={3} title="Test Case">
+                        <TestCase storyId={this.state.story.storyId}></TestCase>
+                    </Tab>
+                </Tabs>
             </div>
         )
     }
 });
+
+var Task = React.createClass({
+    render: function () {
+        return (
+            <div></div>
+        )
+    }
+});
+
+var TestCase = React.createClass({
+    getInitialState: function () {
+        return {
+            items: []
+        }
+    },
+    componentWillMount: function () {
+        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('case');
+        this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+        var id = this.props.storyId;
+        if (id) {
+            this.firebaseRef.orderByKey().equalTo(id).once('value', function (snap) {
+                if (snap.val()) {
+                    this.setState({
+                        story: snap.val()[id]
+                    });
+                }
+            }.bind(this));
+        }
+    },
+    componentWillUnmount: function () {
+        this.firebaseRef.off();
+    },
+    save: function (testCase, index) {
+        //TODO
+
+        var data = this.state.story;
+        data.updateTime = new Date().getTime().toString();
+
+        if (!data.basic.name) {
+            alert('must need name');
+            return;
+        }
+        if (data.storyId) {
+            saveData(this, data)
+        } else {
+            data.id = new Date().getTime().toString();
+            this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
+                var index = snap.val()['storyIndex'];
+                var storyId = 'STORY0' + index;
+                //update index
+                this.indexRef.child('storyIndex').set(parseInt(index) + 1);
+                data.storyId = storyId;
+                var temp = this;
+            }.bind(this));
+        }
+
+        function saveData(me, data, cb) {
+            me.firebaseRef.child(data.storyId).set(data, function (error) {
+                if (!error) {
+                    if (cb) {
+                        cb();
+                    }
+                    console.log('save succ!');
+                } else {
+                    delete me.storyId;
+                    alert('save fail! please to check on console');
+                    console.log('error happen when ')
+                }
+            });
+        }
+
+    },
+    renderItem: function (item, index) {
+        return (
+            <CaseItem onSave={this.save} case={item} key={item.id || index} onChange={this.handleChange}
+                      index={index}></CaseItem>
+        );
+    },
+    handleChange: function (name, step, expc, actual, index) {
+        this.state.items[index] = {
+            step: step,
+            name: name,
+            expc: expc,
+            actual: actual
+        };
+        this.setState({
+            items: this.state.items
+        });
+    },
+    addCase: function () {
+        this.state.items.push({
+            name: '',
+            step: '',
+            expc: '',
+            actual: ''
+        });
+        this.setState({
+            items: this.state.items
+        });
+    },
+    render: function () {
+        return (
+            <div>
+                {this.state.items.map(this.renderItem)}
+                <BS.Button onClick={this.addCase}>Add Test Case</BS.Button>
+            </div>
+        )
+    }
+});
+
+var CaseItem = React.createClass({
+    handleChange: function () {
+        this.props.onChange(
+            this.refs.name.value,
+            this.refs.step.value,
+            this.refs.expc.value,
+            this.refs.actual.value,
+            this.props.index
+        );
+    },
+    save: function () {
+        this.props.onSave(this.props.case, this.props.index);
+    },
+    render: function () {
+        var style = {
+            width: '250px',
+            height: '100px'
+        };
+        var divStyle = {
+            width: '33%',
+            display: 'inline'
+        };
+        return (
+            <div>
+                <well>
+                    <label>Case Name: </label>
+                    <input value={this.props.case.name} onChange={this.handleChange} ref="name"/>
+                    <BS.Button onClick={this.save}>Save Case</BS.Button>
+                    <br/>
+                    <div style={divStyle}>
+                        <label>Step: </label>
+                        <textarea value={this.props.case.step} onChange={this.handleChange} ref="step" style={style}/>
+                    </div>
+
+                    <div style={divStyle}>
+                        <label>Expected Result : </label>
+                        <textarea value={this.props.case.expc} onChange={this.handleChange} ref="expc" style={style}/>
+                    </div>
+
+                    <div style={divStyle}>
+                        <label>Actual Result : </label>
+                        <textarea value={this.props.case.actual} onChange={this.handleChange} ref="actual"
+                                  style={style}/>
+                    </div>
+                </well>
+            </div>
+        )
+    }
+});
+
 
 var el = document.getElementById('story');
 if (el) {
