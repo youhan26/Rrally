@@ -128,7 +128,7 @@ var StoryBasic = React.createClass({
                 <section>
                     <labe>Story Name:</labe>
                     <input ref="name" onChange={this.handleChange} value={this.props.basic.name}/>
-                    <button onClick={this.click}>Create New Story</button>
+                    <button onClick={this.click}>{this.props.id ? 'Edit Story' : 'Create Story'}</button>
 
                     <h3>Description:</h3>
                     <textarea row="10" ref="desc" onChange={this.handleChange}
@@ -146,9 +146,14 @@ var StoryBasic = React.createClass({
  * story include the base description, status, schedule and attachments
  */
 var Story = React.createClass({
-    displayName: 'story',
     getInitialState: function () {
-
+        var search = window.location.search;
+        if (search) {
+            var result = search.match(/id=([\w]*)/);
+            if (result.length > 1) {
+                this.storyId = result[1];
+            }
+        }
         return {
             story: {
                 basic: {
@@ -170,66 +175,77 @@ var Story = React.createClass({
         }
     },
     statusChange: function (plan, task, todo) {
+        this.state.story.status = {
+            planEst: parseInt(plan),
+            taskEst: parseInt(task),
+            todo: parseInt(todo)
+        };
         this.setState({
-            story: {
-                basic: this.state.story.basic,
-                status: {
-                    planEst: parseInt(plan),
-                    taskEst: parseInt(task),
-                    todo: parseInt(todo)
-                },
-                schedule: this.state.story.schedule
-            }
+            story: this.state.story
         });
     },
     basicChange: function (name, desc, note) {
+        this.state.story.basic = {
+            name: name,
+            desc: desc,
+            note: note
+        };
         this.setState({
-            story: {
-                basic: {
-                    name: name,
-                    desc: desc,
-                    note: note
-                },
-                status: this.state.story.status,
-                schedule: this.state.story.schedule
-            }
+            story: this.state.story
         });
     },
     scheduleChange: function (project, iteration, release) {
+        this.state.story.schedule = {
+            project: project,
+            iteration: iteration,
+            release: release
+        };
         this.setState({
-            story: {
-                basic: this.state.story.basic,
-                status: this.state.story.status,
-                schedule: {
-                    project: project,
-                    iteration: iteration,
-                    release: release
-                }
-            }
+            story: this.state.story
         });
     },
     componentWillMount: function () {
         this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('story');
         this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+        if (this.storyId) {
+            this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
+                if (!snap.val()) {
+                    delete  this.storyId;
+                } else {
+                    this.setState({
+                        story: snap.val()[this.storyId]
+                    });
+                }
+            }.bind(this));
+        }
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
     },
     create: function () {
         var data = this.state.story;
+        data.updateTime = new Date().getTime().toString();
+
         if (!data.basic.name) {
             alert('must need name');
             return;
         }
-        data.id = new Date().getTime().toString();
-        this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
-            var index = snap.val()['storyIndex'];
-            var storyId = 'STORY0' + index;
-            //update index
-            this.indexRef.child('storyIndex').set(parseInt(index) + 1);
-            data.storyId = storyId;
+        if (this.storyId) {
+            saveData(this, data)
+        } else {
+            data.id = new Date().getTime().toString();
+            this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
+                var index = snap.val()['storyIndex'];
+                var storyId = 'STORY0' + index;
+                //update index
+                this.indexRef.child('storyIndex').set(parseInt(index) + 1);
+                data.storyId = storyId;
+                saveData(this, data);
+            }.bind(this));
+        }
 
-            this.firebaseRef.child(storyId).set(data, function (error) {
+        function saveData(me, data) {
+            me.firebaseRef.child(data.storyId).set(data, function (error) {
                 if (!error) {
                     //TODO list page
                     console.log('save succ!');
@@ -238,7 +254,7 @@ var Story = React.createClass({
                     console.log('error happen when ')
                 }
             });
-        }.bind(this));
+        }
 
     },
     render: function () {
@@ -246,7 +262,7 @@ var Story = React.createClass({
         return (
             <div>
                 <StoryBasic onCreate={this.create} basicChange={this.basicChange}
-                            basic={this.state.story.basic}>
+                            basic={this.state.story.basic} id={this.state.story.id}>
                 </StoryBasic>
                 <Attachments></Attachments>
                 <StorySchedule schedule={this.state.story.schedule}
