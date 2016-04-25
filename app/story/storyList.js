@@ -13,7 +13,7 @@ var StoryList = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com/story');
+        this.firebaseRef = new Firebase('https://fuckme.firebaseio.com/story');
         this.firebaseRef.on("child_added", function (snap) {
             this.state.items.push(snap.val());
             this.setState({
@@ -85,9 +85,9 @@ var StoryItem = React.createClass({
                     <section>
                         <h3>{this.props.story.basic.name}</h3>
                         <h4>Desc:</h4>
-                        {this.props.story.basic.desc}
+                        <TextLine lines={this.props.story.basic.desc}></TextLine>
                         <h4>Note :</h4>
-                        {this.props.story.basic.note}
+                        <TextLine lines={this.props.story.basic.note}></TextLine>
                         <br/>
 
                         <label>Plan Est:</label>{this.props.story.status.planEst}&nbsp;
@@ -98,6 +98,24 @@ var StoryItem = React.createClass({
                 </li>
             </div>
         )
+    }
+});
+
+var TextLine = React.createClass({
+    render: function () {
+        var lines = this.props.lines;
+        var lineMap = lines.split('\n');
+
+        function wrap(item) {
+            var data = Math.random() * 10000;
+            return <p key={data}>{item}</p>;
+        }
+
+        return (
+            <div>
+                {lineMap.map(wrap)}
+            </div>
+        );
     }
 });
 

@@ -212,8 +212,8 @@ var Story = React.createClass({
         });
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('story');
-        this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+        this.firebaseRef = new Firebase('https://fuckme.firebaseio.com').child('story');
+        this.indexRef = new Firebase('https://fuckme.firebaseio.com').child('index');
         if (this.storyId) {
             this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
                 if (!snap.val()) {
@@ -278,35 +278,31 @@ var Story = React.createClass({
     render: function () {
         return (
             <div>
-                <Tabs defaultActiveKey={1} id="storyTabs">
-                    <Tab eventKey={1} title="Story">
-                        <BS.Well>
-                            <StoryBasic onCreate={this.create} basicChange={this.basicChange}
-                                        basic={this.state.story.basic} id={this.state.story.id}>
-                            </StoryBasic>
-                        </BS.Well>
-                        <Attachments></Attachments>
-                        <BS.Well>
-                            <StorySchedule schedule={this.state.story.schedule}
-                                           scheduleChange={this.scheduleChange}>
-                            </StorySchedule>
-                        </BS.Well>
-                        <BS.Well>
-                            <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
-                            </StoryStatus>
-                        </BS.Well>
-                    </Tab>
-                    <Tab eventKey={2} title="Task">
-                        <Task storyId={this.state.story.storyId}></Task>
-                    </Tab>
-                    <Tab eventKey={3} title="Test Case">
-                        <TestCase storyId={this.state.story.storyId}></TestCase>
-                    </Tab>
-                </Tabs>
+                <BS.Well>
+                    <StoryBasic onCreate={this.create} basicChange={this.basicChange}
+                                basic={this.state.story.basic} id={this.state.story.id}>
+                    </StoryBasic>
+                </BS.Well>
+                <Attachments></Attachments>
+                <BS.Well>
+                    <StorySchedule schedule={this.state.story.schedule}
+                                   scheduleChange={this.scheduleChange}>
+                    </StorySchedule>
+                </BS.Well>
+                <BS.Well>
+                    <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
+                    </StoryStatus>
+                </BS.Well>
             </div>
         )
     }
 });
+// <Tab eventKey={2} title="Task">
+//     <Task storyId={this.state.story.storyId}></Task>
+// </Tab>
+// <Tab eventKey={3} title="Test Case">
+//     <TestCase storyId={this.state.story.storyId}></TestCase>
+// </Tab>
 
 var Task = React.createClass({
     render: function () {
@@ -323,8 +319,8 @@ var TestCase = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('case');
-        this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+        this.firebaseRef = new Firebase('https://fuckme.firebaseio.com').child('case');
+        this.indexRef = new Firebase('https://fuckme.firebaseio.com').child('index');
         var id = this.props.storyId;
         if (id) {
             this.firebaseRef.orderByKey().equalTo(id).once('value', function (snap) {
