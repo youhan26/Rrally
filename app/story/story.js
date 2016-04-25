@@ -10,6 +10,7 @@ var Tab = BS.Tab;
 var Tabs = BS.Tabs;
 var ListGroup = BS.ListGroup;
 var ListGroupItem = BS.ListGroupItem;
+var ReleaseSelect = require('./../common/releaseSelect');
 
 /**
  * attachments will support the upload all kinds of file function.
@@ -32,7 +33,15 @@ var StorySchedule = React.createClass({
         this.props.scheduleChange(
             ref.project.value,
             ref.iteration.value,
-            ref.release.value
+            this.props.schedule.release
+        );
+    },
+    releaseChange: function (value) {
+        var ref = this.refs;
+        this.props.scheduleChange(
+            ref.project.value,
+            ref.iteration.value,
+            value
         );
     },
     /**
@@ -56,8 +65,8 @@ var StorySchedule = React.createClass({
                     <input value={this.props.schedule.iteration} onChange={this.handleChange}
                            ref="iteration"/>
                     <label>Release : </label>
-                    <input value={this.props.schedule.release} onChange={this.handleChange}
-                           ref="release"/>
+                    <ReleaseSelect value={this.props.schedule.release} onChange={this.releaseChange}>
+                    </ReleaseSelect>
                 </section>
             </div>
         )

@@ -17,3 +17,4 @@ require('./../node_modules/marked/marked.min.js');
 // require('./app/js/app');
 // require('./app/js/todoList');
 require('./../app/utils/addChild');
+require('./../app/utils/addRelease');
