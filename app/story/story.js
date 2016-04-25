@@ -117,7 +117,11 @@ var StoryBasic = React.createClass({
         });
     },
     handleChange: function () {
-        this.props.basicChange(this.refs.name.value, this.refs.desc.value, this.refs.note.value);
+        this.props.basicChange({
+            name: this.refs.name.value,
+            desc: this.refs.desc.value,
+            note: this.refs.note.value
+        });
     },
     render: function () {
         var textStyle = {
@@ -174,7 +178,8 @@ var Story = React.createClass({
                         iteration: '',
                         release: ''
                     },
-                    task: []
+                    task: [],
+                    case: []
                 }
             }
         },
@@ -188,12 +193,8 @@ var Story = React.createClass({
                 story: this.state.story
             });
         },
-        basicChange: function (name, desc, note) {
-            this.state.story.basic = {
-                name: name,
-                desc: desc,
-                note: note
-            };
+        basicChange: function (basic) {
+            this.state.story.basic = basic;
             this.setState({
                 story: this.state.story
             });
@@ -209,15 +210,22 @@ var Story = React.createClass({
             });
         },
         componentWillMount: function () {
-            this.firebaseRef = new Firebase('https://fuckme.firebaseio.com').child('story');
-            this.indexRef = new Firebase('https://fuckme.firebaseio.com').child('index');
+            this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('story');
+            this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
             if (this.storyId) {
                 this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
                     if (!snap.val()) {
                         delete  this.storyId;
                     } else {
+                        var story = snap.val()[this.storyId];
+                        if (!story.task) {
+                            story.task = [];
+                        }
+                        if (!story.case) {
+                            story.case = [];
+                        }
                         this.setState({
-                            story: snap.val()[this.storyId]
+                            story: story
                         });
                     }
                 }.bind(this));
@@ -270,9 +278,6 @@ var Story = React.createClass({
                 });
             }
         },
-        saveTask: function () {
-            //TODO
-        },
         addTask: function () {
             this.state.story.task.push({
                 id: new Date().getTime().toString(),
@@ -309,6 +314,29 @@ var Story = React.createClass({
             story.status.taskEst = est;
             story.status.todo = todo;
         },
+        addCase: function () {
+            this.state.story.case.push({
+                id: new Date().getTime().toString(),
+                name: '',
+                est: 0,
+                todo: 0
+            });
+            this.setState({
+                story: this.state.story
+            });
+        },
+        caseChange: function (data) {
+            var list = this.state.story.case;
+            for (var i in list) {
+                if (list[i].id === data.id) {
+                    list[i] = data;
+                    break;
+                }
+            }
+            this.setState({
+                story: this.state.story
+            });
+        },
         render: function () {
             return (
                 <div>
@@ -335,7 +363,9 @@ var Story = React.createClass({
                                   onChange={this.taskChange}></Task>
                         </Tab>
                         <Tab eventKey={3} title="Test Case">
-
+                            <Case saveAll={this.create} case={this.state.story.case} onAdd={this.addCase}
+                                  onChange={this.caseChange}>
+                            </Case>
                         </Tab>
                     </Tabs>
                 </div>
@@ -346,7 +376,7 @@ var Story = React.createClass({
 
 var Task = React.createClass({
     renderItem: function (item) {
-        return <TaskItem task={item} onChange={this.onChange} key={item.id}></TaskItem>
+        return <BS.Well key={item.id}><TaskItem task={item} onChange={this.onChange}></TaskItem></BS.Well>
     },
     saveTask: function (task) {
         this.props.saveAll(task);
@@ -357,8 +387,6 @@ var Task = React.createClass({
     addTask: function () {
         this.props.onAdd();
     },
-
-
     render: function () {
         return (
             <div>
@@ -388,8 +416,10 @@ var TaskItem = React.createClass({
             <div>
                 <label>Task Name:</label>
                 <input value={this.props.task.name} onChange={this.handleChange} ref="name" style={style}/>
+                &nbsp;&nbsp;
                 <label>Task Est:</label>
                 <input value={this.props.task.est} onChange={this.handleChange} ref="est" type="number"/>
+                &nbsp;&nbsp;
                 <label>Task todo:</label>
                 <input value={this.props.task.todo} onChange={this.handleChange} ref="todo" type="number"/>
             </div>
@@ -397,157 +427,79 @@ var TaskItem = React.createClass({
     }
 });
 
-// var TestCase = React.createClass({
-//     getInitialState: function () {
-//         return {
-//             items: []
-//         }
-//     },
-//     componentWillMount: function () {
-//         this.firebaseRef = new Firebase('https://fuckme.firebaseio.com').child('case');
-//         this.indexRef = new Firebase('https://fuckme.firebaseio.com').child('index');
-//         var id = this.props.storyId;
-//         if (id) {
-//             this.firebaseRef.orderByKey().equalTo(id).once('value', function (snap) {
-//                 if (snap.val()) {
-//                     this.setState({
-//                         story: snap.val()[id]
-//                     });
-//                 }
-//             }.bind(this));
-//         }
-//     },
-//     componentWillUnmount: function () {
-//         this.firebaseRef.off();
-//     },
-//     save: function (testCase, index) {
-//         //TODO
-//
-//         var data = this.state.story;
-//         data.updateTime = new Date().getTime().toString();
-//
-//         if (!data.basic.name) {
-//             alert('must need name');
-//             return;
-//         }
-//         if (data.storyId) {
-//             saveData(this, data)
-//         } else {
-//             data.id = new Date().getTime().toString();
-//             this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
-//                 var index = snap.val()['storyIndex'];
-//                 var storyId = 'STORY0' + index;
-//                 //update index
-//                 this.indexRef.child('storyIndex').set(parseInt(index) + 1);
-//                 data.storyId = storyId;
-//                 var temp = this;
-//             }.bind(this));
-//         }
-//
-//         function saveData(me, data, cb) {
-//             me.firebaseRef.child(data.storyId).set(data, function (error) {
-//                 if (!error) {
-//                     if (cb) {
-//                         cb();
-//                     }
-//                     console.log('save succ!');
-//                 } else {
-//                     delete me.storyId;
-//                     alert('save fail! please to check on console');
-//                     console.log('error happen when ')
-//                 }
-//             });
-//         }
-//
-//     },
-//     renderItem: function (item, index) {
-//         return (
-//             <CaseItem onSave={this.save} case={item} key={item.id || index} onChange={this.handleChange}
-//                       index={index}></CaseItem>
-//         );
-//     },
-//     handleChange: function (name, step, expc, actual, index) {
-//         this.state.items[index] = {
-//             step: step,
-//             name: name,
-//             expc: expc,
-//             actual: actual
-//         };
-//         this.setState({
-//             items: this.state.items
-//         });
-//     },
-//     addCase: function () {
-//         this.state.items.push({
-//             name: '',
-//             step: '',
-//             expc: '',
-//             actual: ''
-//         });
-//         this.setState({
-//             items: this.state.items
-//         });
-//     },
-//     render: function () {
-//         return (
-//             <div>
-//                 {this.state.items.map(this.renderItem)}
-//                 <BS.Button onClick={this.addCase}>Add Test Case</BS.Button>
-//             </div>
-//         )
-//     }
-// });
-//
-// var CaseItem = React.createClass({
-//     handleChange: function () {
-//         this.props.onChange(
-//             this.refs.name.value,
-//             this.refs.step.value,
-//             this.refs.expc.value,
-//             this.refs.actual.value,
-//             this.props.index
-//         );
-//     },
-//     save: function () {
-//         this.props.onSave(this.props.case, this.props.index);
-//     },
-//     render: function () {
-//         var style = {
-//             width: '250px',
-//             height: '100px'
-//         };
-//         var divStyle = {
-//             width: '33%',
-//             display: 'inline'
-//         };
-//         return (
-//             <div>
-//                 <well>
-//                     <label>Case Name: </label>
-//                     <input value={this.props.case.name} onChange={this.handleChange} ref="name"/>
-//                     <BS.Button onClick={this.save}>Save Case</BS.Button>
-//                     <br/>
-//                     <div style={divStyle}>
-//                         <label>Step: </label>
-//                         <textarea value={this.props.case.step} onChange={this.handleChange} ref="step" style={style}/>
-//                     </div>
-//
-//                     <div style={divStyle}>
-//                         <label>Expected Result : </label>
-//                         <textarea value={this.props.case.expc} onChange={this.handleChange} ref="expc" style={style}/>
-//                     </div>
-//
-//                     <div style={divStyle}>
-//                         <label>Actual Result : </label>
-//                         <textarea value={this.props.case.actual} onChange={this.handleChange} ref="actual"
-//                                   style={style}/>
-//                     </div>
-//                 </well>
-//             </div>
-//         )
-//     }
-// });
 
+var Case = React.createClass({
+    renderItem: function (item) {
+        return (
+            <BS.Well key={item.id}>
+                <CaseItem case={item} onChange={this.onChange}></CaseItem>
+            </BS.Well>
+        )
+    },
+    saveCase: function (data) {
+        this.props.saveAll(data);
+    },
+    onChange: function (data) {
+        this.props.onChange(data);
+    },
+    addCase: function () {
+        this.props.onAdd();
+    },
+    render: function () {
+        return (
+            <div>
+                {this.props.case.map(this.renderItem)}
+                <BS.Button onClick={this.addCase}>Add Case</BS.Button>
+                <BS.Button onClick={this.saveCase}>Save Case</BS.Button>
+            </div>
+        )
+    }
+});
+
+var CaseItem = React.createClass({
+    handleChange: function () {
+        this.props.onChange({
+            id: this.props.case.id,
+            name: this.refs.name.value,
+            step: this.refs.step.value,
+            expc: this.refs.expc.value,
+            actual: this.refs.actual.value,
+            updateTime: new Date().getTime()
+        });
+    },
+    render: function () {
+        var style = {
+            width: '250px',
+            height: '100px'
+        };
+        var divStyle = {
+            width: '33%',
+            display: 'inline'
+        };
+        return (
+            <div>
+                <label>Case Name: </label>
+                <input value={this.props.case.name} onChange={this.handleChange} ref="name"/>
+                <br/>
+                <div style={divStyle}>
+                    <label>Step: </label>
+                    <textarea value={this.props.case.step} onChange={this.handleChange} ref="step" style={style}/>
+                </div>
+
+                <div style={divStyle}>
+                    <label>Expected Result : </label>
+                    <textarea value={this.props.case.expc} onChange={this.handleChange} ref="expc" style={style}/>
+                </div>
+
+                <div style={divStyle}>
+                    <label>Actual Result : </label>
+                        <textarea value={this.props.case.actual} onChange={this.handleChange} ref="actual"
+                                  style={style}/>
+                </div>
+            </div>
+        )
+    }
+});
 
 var el = document.getElementById('story');
 if (el) {
