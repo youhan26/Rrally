@@ -83,7 +83,7 @@ var StoryItem = React.createClass({
             <div>
                 <li>
                     <section>
-                        <h3>{this.props.story.basic.name}</h3>
+                        <h3>{this.props.story.basic.name} —— {this.props.story.storyId}</h3>
                         <h4>Desc:</h4>
                         <TextLine lines={this.props.story.basic.desc}></TextLine>
                         <h4>Note :</h4>

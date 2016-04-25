@@ -340,6 +340,7 @@ var Story = React.createClass({
         render: function () {
             return (
                 <div>
+                    <h2>{this.state.story.storyId}</h2>
                     <Tabs defaultActiveKey={1} animation={false} id="storyDetailTabs">
                         <Tab eventKey={1} title="Story ">
                             <BS.Well>
