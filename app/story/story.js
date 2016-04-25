@@ -210,8 +210,8 @@ var Story = React.createClass({
             });
         },
         componentWillMount: function () {
-            this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('story');
-            this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+            this.firebaseRef = new Firebase('https://fuckme.firebaseio.com').child('story');
+            this.indexRef = new Firebase('https://fuckme.firebaseio.com').child('index');
             if (this.storyId) {
                 this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
                     if (!snap.val()) {

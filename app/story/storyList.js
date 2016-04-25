@@ -13,7 +13,7 @@ var StoryList = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com/story');
+        this.firebaseRef = new Firebase('https://fuckme.firebaseio.com/story');
         this.firebaseRef.on("child_added", function (snap) {
             this.state.items.push(snap.val());
             this.setState({
