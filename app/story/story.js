@@ -255,6 +255,7 @@ var Story = React.createClass({
                 saveData(this, data)
             } else {
                 data.id = new Date().getTime().toString();
+                data.action = 1;
                 this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
                     var index = snap.val()['storyIndex'];
                     var storyId = 'STORY0' + index;

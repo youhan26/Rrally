@@ -11,13 +11,16 @@ var Button = bs.Button;
 var StoryList = React.createClass({
     getInitialState: function () {
         return {
-            items: []
+            items: [[], [], [], [], [], []]
         }
     },
     componentWillMount: function () {
         this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com/story');
         this.firebaseRef.orderByChild('id').on("child_added", function (snap) {
-            this.state.items.push(snap.val());
+            var data = snap.val();
+            if (data && data.action) {
+                this.state.items[data.action - 1].push(data)
+            }
             this.setState({
                 items: this.state.items
             });
@@ -25,12 +28,17 @@ var StoryList = React.createClass({
         this.firebaseRef.on('child_changed', function (snap) {
             var data = snap.val();
             if (data.id) {
-                var list = this.state.items;
+                var flag = true;
+                var list = this.state.items[data.action - 1];
                 for (var i in list) {
                     if (list[i].id === data.id) {
                         list[i] = data;
+                        flag = false;
                         break;
                     }
+                }
+                if (flag) {
+                    this.state.items[data.action - 1].push(data);
                 }
                 this.setState({
                     items: this.state.items
@@ -40,7 +48,7 @@ var StoryList = React.createClass({
         this.firebaseRef.on('child_removed', function (snap) {
             var data = snap.val();
             if (data.id) {
-                var list = this.state.items;
+                var list = this.state.items[data.action - 1];
                 for (var i in list) {
                     if (list[i].id === data.id) {
                         list.splice(i, 1);
@@ -58,13 +66,67 @@ var StoryList = React.createClass({
     },
     renderLi: function (item) {
         return (
-            <StoryItem story={item} key={item.id}></StoryItem>
+            <StoryItem story={item} key={item.id} onLeft={this.onLeft} onRight={this.onRight}>
+            </StoryItem>
         );
+    },
+    onLeft: function (data) {
+        if (!data || data.action <= 1) {
+            alert('ni shi dou bi me? ');
+            return;
+        }
+        this.firebaseRef.child(data.storyId).child('action').set(data.action - 1, function (error) {
+            this.updateAction(data);
+        }.bind(this));
+    },
+    onRight: function (data) {
+        if (!data || data.action >= 6) {
+            alert('ni shi dou bi me? ');
+            return;
+        }
+        this.firebaseRef.child(data.storyId).child('action').set(data.action + 1, function (error) {
+            this.updateAction(data);
+        }.bind(this));
+    },
+    updateAction: function (data) {
+        var list = this.state.items[data.action - 1];
+        for (var i in list) {
+            if (list[i].id == data.id) {
+                list.splice(i, 1);
+                break;
+            }
+        }
+        this.setState({
+            items: this.state.items
+        });
     },
     render: function () {
         return (
             <div>
-                <ul>{this.state.items.map(this.renderLi)}</ul>
+                <div className="state-div">
+                    <h3>定义</h3>
+                    {this.state.items[0].map(this.renderLi)}
+                </div>
+                <div className="state-div">
+                    <h3>开发中</h3>
+                    {this.state.items[1].map(this.renderLi)}
+                </div>
+                <div className="state-div">
+                    <h3>开发完成</h3>
+                    {this.state.items[2].map(this.renderLi)}
+                </div>
+                <div className="state-div">
+                    <h3>测试中</h3>
+                    {this.state.items[3].map(this.renderLi)}
+                </div>
+                <div className="state-div">
+                    <h3>测试完成</h3>
+                    {this.state.items[4].map(this.renderLi)}
+                </div>
+                <div className="state-div">
+                    <h3>上线</h3>
+                    {this.state.items[5].map(this.renderLi)}
+                </div>
             </div>
         )
     }
@@ -77,27 +139,24 @@ var StoryItem = React.createClass({
             window.open("story.html?id=" + data.storyId, '_blank');
         }
     },
+    clickLeft: function () {
+        this.props.onLeft(this.props.story);
+    },
+    clickRight: function () {
+        this.props.onRight(this.props.story);
+    },
     render: function () {
         return (
             <div>
-                <li>
-                    <section>
-                        <h3>
-                            <Button bsStyle="primary"><a onClick={this.goEditPage}>
-                                {this.props.story.storyId}--{this.props.story.basic.name}
-                            </a></Button>
-                        </h3>
-                        <h4>Desc:</h4>
-                        <TextLine lines={this.props.story.basic.desc}></TextLine>
-                        <h4>Note :</h4>
-                        <TextLine lines={this.props.story.basic.note}></TextLine>
-                        <br/>
-
-                        <label>Plan Est:</label>{this.props.story.status.planEst}&nbsp;
-                        <label>Task Est:</label>{this.props.story.status.taskEst}&nbsp;
-                        <label>TODO:</label>{this.props.story.status.todo}&nbsp;
-                    </section>
-                </li>
+                <section className="storyItem">
+                    <h4>
+                        <a onClick={this.goEditPage}>
+                            {this.props.story.storyId}--{this.props.story.basic.name}
+                        </a>
+                    </h4>
+                    <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
+                    <Button bsStyle="primary" class="right-button" onClick={this.clickRight}>&gt;</Button>
+                </section>
             </div>
         )
     }
