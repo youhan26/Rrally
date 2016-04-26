@@ -5,10 +5,10 @@
 (function () {
 
     var constant = {
-        host: 'https://mimikiyru.firebaseio.com',
-        story: 'https://mimikiyru.firebaseio.com/story',
-        index: 'https://mimikiyru.firebaseio.com/index',
-        release: 'https://mimikiyru.firebaseio.com/release'
+        host: 'https://fuckme.firebaseio.com',
+        story: 'https://fuckme.firebaseio.com/story',
+        index: 'https://fuckme.firebaseio.com/index',
+        release: 'https://fuckme.firebaseio.com/release'
     };
 
     module.exports = constant;

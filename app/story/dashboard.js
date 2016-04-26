@@ -98,30 +98,14 @@ var StoryList = React.createClass({
             alert('ni shi dou bi me? ');
             return;
         }
-        this.firebaseRef.child(data.storyId).child('action').set(data.action - 1, function (error) {
-            // this.updateAction(data);
-        }.bind(this));
+        this.firebaseRef.child(data.storyId).child('action').set(data.action - 1);
     },
     onRight: function (data) {
         if (!data || data.action >= 6) {
             alert('ni shi dou bi me? ');
             return;
         }
-        this.firebaseRef.child(data.storyId).child('action').set(data.action + 1, function (error) {
-            // this.updateAction(data);
-        }.bind(this));
-    },
-    updateAction: function (data) {
-        var list = this.state.items[data.action - 1];
-        for (var i in list) {
-            if (list[i].id == data.id) {
-                list.splice(i, 1);
-                break;
-            }
-        }
-        this.setState({
-            items: this.state.items
-        });
+        this.firebaseRef.child(data.storyId).child('action').set(data.action + 1);
     },
     render: function () {
         return (
