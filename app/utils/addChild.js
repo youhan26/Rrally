@@ -15,7 +15,7 @@ var AddChild = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new firebase('https://fuckme.firebaseio.com');
+        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com');
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();

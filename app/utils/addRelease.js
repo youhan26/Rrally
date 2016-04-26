@@ -14,8 +14,8 @@ var Release = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.firebaseRef = new firebase('https://fuckme.firebaseio.com').child('release');
-        this.indexRef = new firebase('https://fuckme.firebaseio.com').child('index');
+        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com').child('release');
+        this.indexRef = new firebase('https://mimikiyru.firebaseio.com').child('index');
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();

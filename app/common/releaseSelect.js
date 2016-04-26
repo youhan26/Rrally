@@ -19,7 +19,7 @@
             }
         },
         componentWillMount: function () {
-            this.firebaseRef = new firebase('https://fuckme.firebaseio.com/release');
+            this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com/release');
             this.firebaseRef.once('value', function (snap) {
                 var value = snap.val();
                 if (value) {
