@@ -278,7 +278,7 @@ var Story = React.createClass({
                         if (cb) {
                             cb();
                         }
-                        console.log('save succ!');
+                        alert('succ!')
                     } else {
                         delete me.storyId;
                         alert('save fail! please to check on console');

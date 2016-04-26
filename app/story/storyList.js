@@ -54,12 +54,9 @@ var StoryList = React.createClass({
     componentWillUnmount: function () {
         this.firebaseRef.off();
     },
-    onEdit: function () {
-        console.log('on Edit', arguments);
-    },
     renderLi: function (item) {
         return (
-            <StoryItem onEdit={this.onEdit} story={item} key={item.id}></StoryItem>
+            <StoryItem story={item} key={item.id}></StoryItem>
         );
     },
     render: function () {

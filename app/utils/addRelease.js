@@ -34,6 +34,7 @@ var Release = React.createClass({
             me.firebaseRef.child(data.id).set(data, function (error) {
                 if (!error) {
                     me.indexRef.child('releaseIndex').set(parseInt(index) + 1);
+                    alert('succ!');
                 }
             });
         });
