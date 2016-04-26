@@ -105,6 +105,9 @@ var StoryList = React.createClass({
             alert('ni shi dou bi me? ');
             return;
         }
+
+
+        
         this.firebaseRef.child(data.storyId).child('action').set(data.action + 1);
     },
     render: function () {
