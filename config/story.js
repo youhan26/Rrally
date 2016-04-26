@@ -17,7 +17,7 @@ require('./../node_modules/marked/marked.min.js');
 
 //app.js
 require('./../app/story/story');
-require('./../app/story/storyList');
+require('./../app/story/dashboard');
 
 
 //common component
