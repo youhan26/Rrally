@@ -174,25 +174,6 @@ var StoryItem = React.createClass({
     }
 });
 
-var TextLine = React.createClass({
-    render: function () {
-        var lines = this.props.lines;
-        var lineMap = lines.split('\n');
-
-        function wrap(item) {
-            var data = Math.random() * 10000;
-            return <p key={data}>{item}</p>;
-        }
-
-        return (
-            <div>
-                {lineMap.map(wrap)}
-            </div>
-        );
-    }
-});
-
-
 var el = document.getElementById('storyList');
 
 if (el) {
