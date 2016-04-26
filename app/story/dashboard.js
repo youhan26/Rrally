@@ -107,7 +107,6 @@ var StoryList = React.createClass({
         }
 
 
-        
         this.firebaseRef.child(data.storyId).child('action').set(data.action + 1);
     },
     render: function () {
@@ -164,6 +163,9 @@ var StoryItem = React.createClass({
                             {this.props.story.storyId}--{this.props.story.basic.name}
                         </a>
                     </h4>
+                    <label>Plan Est:</label> {this.props.story.status.planEst}<br/>
+                    <label>Task Est:</label> {this.props.story.status.taskEst}<br/>
+                    <label>Todo:</label> {this.props.story.status.todo}<br/>
                     <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
                     <Button bsStyle="primary" class="right-button" onClick={this.clickRight}>&gt;</Button>
                 </section>
