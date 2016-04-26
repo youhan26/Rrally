@@ -6,6 +6,7 @@ var ReactDOM = require('react-dom');
 var firebase = require('firebase');
 var bs = require('react-bootstrap');
 var BUTTON = bs.Button;
+var constant = require('./../common/constant');
 
 var Release = React.createClass({
     getInitialState: function () {
@@ -14,8 +15,8 @@ var Release = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com').child('release');
-        this.indexRef = new firebase('https://mimikiyru.firebaseio.com').child('index');
+        this.firebaseRef = new firebase(constant.release);
+        this.indexRef = new firebase(constant.index);
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();

@@ -7,6 +7,7 @@ var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
 var bs = require('react-bootstrap');
 var Button = bs.Button;
+var constant = require('./../common/constant');
 
 var StoryList = React.createClass({
     getInitialState: function () {
@@ -14,8 +15,19 @@ var StoryList = React.createClass({
             items: [[], [], [], [], [], []]
         }
     },
+    updateList: function (list, data) {
+        if (list) {
+            for (var i in list) {
+                if (list[i].id == data.id) {
+                    list.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+    },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com/story');
+        this.firebaseRef = new Firebase(constant.story);
         this.firebaseRef.orderByChild('id').on("child_added", function (snap) {
             var data = snap.val();
             if (data && data.action) {
@@ -37,8 +49,19 @@ var StoryList = React.createClass({
                         break;
                     }
                 }
+                var before = this.state.items[data.action - 2];
+                var after = this.state.items[data.action];
+                this.updateList(before, data);
+                this.updateList(after, data);
+
                 if (flag) {
                     this.state.items[data.action - 1].push(data);
+                    this.state.items[data.action - 1].sort(function (a, b) {
+                        if (a.id > b.id) {
+                            return 1;
+                        }
+                        return -1;
+                    });
                 }
                 this.setState({
                     items: this.state.items
@@ -76,7 +99,7 @@ var StoryList = React.createClass({
             return;
         }
         this.firebaseRef.child(data.storyId).child('action').set(data.action - 1, function (error) {
-            this.updateAction(data);
+            // this.updateAction(data);
         }.bind(this));
     },
     onRight: function (data) {
@@ -85,7 +108,7 @@ var StoryList = React.createClass({
             return;
         }
         this.firebaseRef.child(data.storyId).child('action').set(data.action + 1, function (error) {
-            this.updateAction(data);
+            // this.updateAction(data);
         }.bind(this));
     },
     updateAction: function (data) {

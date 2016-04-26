@@ -8,9 +8,8 @@ var firebase = require('firebase');
 var BS = require('react-bootstrap');
 var Tab = BS.Tab;
 var Tabs = BS.Tabs;
-var ListGroup = BS.ListGroup;
-var ListGroupItem = BS.ListGroupItem;
 var ReleaseSelect = require('./../common/releaseSelect');
+var constant = require('./../common/constant');
 
 /**
  * attachments will support the upload all kinds of file function.
@@ -219,8 +218,8 @@ var Story = React.createClass({
             });
         },
         componentWillMount: function () {
-            this.firebaseRef = new Firebase('https://mimikiyru.firebaseio.com').child('story');
-            this.indexRef = new Firebase('https://mimikiyru.firebaseio.com').child('index');
+            this.firebaseRef = new Firebase(constant.story);
+            this.indexRef = new Firebase(constant.index);
             if (this.storyId) {
                 this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
                     if (!snap.val()) {

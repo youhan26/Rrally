@@ -11,10 +11,13 @@ require('./../node_modules/firebase/lib/firebase-web');
 // require('./../node_modules/reactfire/dist/reactfire.min.js');
 
 //marked
-require('./../node_modules/marked/marked.min.js');
+// require('./../node_modules/marked/marked.min.js');
 
 //app.js
 // require('./app/js/app');
 // require('./app/js/todoList');
 require('./../app/utils/addChild');
 require('./../app/utils/addRelease');
+
+//common
+require('./../app/common/constant');

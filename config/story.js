@@ -10,7 +10,7 @@ require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
 require('./../node_modules/firebase/lib/firebase-web');
 
 //marked
-require('./../node_modules/marked/marked.min.js');
+// require('./../node_modules/marked/marked.min.js');
 
 //material ui
 // require('./../node_modules/material-ui/lib/tabs');
@@ -22,3 +22,4 @@ require('./../app/story/dashboard');
 
 //common component
 require('./../app/common/releaseSelect');
+require('./../app/common/constant');

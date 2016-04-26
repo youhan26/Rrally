@@ -6,6 +6,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var firebase = require('firebase');
+var constant = require('./../common/constant');
 
 
 var AddChild = React.createClass({
@@ -15,7 +16,7 @@ var AddChild = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com');
+        this.firebaseRef = new firebase(constant.host);
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
