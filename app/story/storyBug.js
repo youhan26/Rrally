@@ -26,9 +26,11 @@
             if (this.storyId) {
                 this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
                     var data = snap.val();
-                    this.setState({
-                        items: data[this.storyId]
-                    });
+                    if (data && data[this.storyId]) {
+                        this.setState({
+                            items: data[this.storyId]
+                        });
+                    }
                 }.bind(this));
             }
         },
