@@ -4,7 +4,7 @@
 'use strict';
 var React = require('react');
 var ReactDOM = require('react-dom');
-var firebase = require('firebase');
+var Firebase = require('firebase');
 var BS = require('react-bootstrap');
 var Tab = BS.Tab;
 var Tabs = BS.Tabs;
@@ -12,6 +12,7 @@ var ReleaseSelect = require('./../common/releaseSelect');
 var constant = require('./../common/constant');
 var Task = require('./storyTask');
 var Case = require('./storyCase');
+var Bug = require('./storyBug');
 
 /**
  * attachments will support the upload all kinds of file function.
@@ -378,6 +379,9 @@ var Story = React.createClass({
                         <Case saveAll={this.create} case={this.state.story.case} onAdd={this.addCase}
                               onChange={this.caseChange}>
                         </Case>
+                    </Tab>
+                    <Tab eventKey={4} title="Bug">
+                        <Bug storyId={this.state.story.storyId}></Bug>
                     </Tab>
                 </Tabs>
             </div>

@@ -18,6 +18,7 @@ require('./../node_modules/firebase/lib/firebase-web');
 //app.js
 require('./../app/story/storyTask');
 require('./../app/story/storyCase');
+require('./../app/story/storyBug');
 require('./../app/story/story');
 require('./../app/story/dashboard');
 
@@ -25,3 +26,4 @@ require('./../app/story/dashboard');
 //common component
 require('./../app/common/releaseSelect');
 require('./../app/common/constant');
+require('./../app/common/bugSelect');

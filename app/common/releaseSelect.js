@@ -6,6 +6,7 @@
 
     var React = require('react');
     var firebase = require('firebase');
+    var constant = require('./constant');
 
     var ReleaseSelect = React.createClass({
         onChange: function () {
@@ -19,7 +20,7 @@
             }
         },
         componentWillMount: function () {
-            this.firebaseRef = new firebase('https://mimikiyru.firebaseio.com/release');
+            this.firebaseRef = new firebase(constant.release);
             this.firebaseRef.once('value', function (snap) {
                 var value = snap.val();
                 if (value) {

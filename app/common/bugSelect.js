@@ -6,10 +6,10 @@
 
     var React = require('react');
 
-    var ReleaseSelect = React.createClass({
+    var BugSelect = React.createClass({
         onChange: function () {
             if (this.props.onChange) {
-                this.props.onChange(this.refs.release.value);
+                this.props.onChange(parseInt(this.refs.bug.value));
             }
         },
         getInitialState: function () {
@@ -32,12 +32,12 @@
             }
 
             return (
-                <select value={this.props.value} onChange={this.onChange} ref="status">
+                <select value={this.props.value} onChange={this.onChange} ref="bug">
                     {this.state.items.map(renderItem)}
                 </select>
             )
         }
     });
 
-    module.exports = ReleaseSelect;
+    module.exports = BugSelect;
 })();

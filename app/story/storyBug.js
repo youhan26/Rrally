@@ -3,44 +3,106 @@
  */
 (function () {
     var React = require('react');
+    var Firebase = require('firebase');
     var BS = require('react-bootstrap');
+    var BugSelect = require('./../common/bugSelect');
+    var constant = require('./../common/constant');
 
     var Bug = React.createClass({
+        getInitialState: function () {
+            var search = window.location.search;
+            if (search) {
+                var result = search.match(/id=([\w]*)/);
+                if (result.length > 1) {
+                    this.storyId = result[1];
+                }
+            }
+            return {
+                items: []
+            }
+        },
+        componentWillMount: function () {
+            this.firebaseRef = new Firebase(constant.host + '/bug');
+            if (this.storyId) {
+                this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
+                    var data = snap.val();
+                    this.setState({
+                        items: data[this.storyId]
+                    });
+                }.bind(this));
+            }
+        },
+        componentWillUnmount: function () {
+            this.firebaseRef.off();
+        },
         renderItem: function (item) {
             return (
                 <BS.Well key={item.id}>
-                    <CaseItem case={item} onChange={this.onChange}></CaseItem>
+                    <BugItem bug={item} onChange={this.onChange}></BugItem>
                 </BS.Well>
             )
         },
-        saveCase: function (data) {
-            this.props.saveAll(data);
+        saveBug: function () {
+            if (this.storyId) {
+                this.firebaseRef.child(this.storyId).set(this.state.items, function (error) {
+                    if (!error) {
+                        alert('succ!');
+                    }
+                });
+                return;
+            }
+            alert('add a story first!');
         },
         onChange: function (data) {
-            this.props.onChange(data);
+            var list = this.state.items;
+            for (var i in list) {
+                if (list[i].id == data.id) {
+                    list[i] = data;
+                    break;
+                }
+            }
+            this.setState({
+                items: list
+            });
         },
-        addCase: function () {
-            this.props.onAdd();
+        addBug: function () {
+            this.state.items.push({
+                id: new Date().getTime().toString(),
+                name: '',
+                step: '',
+                status: 1
+            });
+            this.setState({
+                items: this.state.items
+            });
         },
         render: function () {
             return (
                 <div>
-                    {this.props.case.map(this.renderItem)}
-                    <BS.Button onClick={this.addCase}>Add Case</BS.Button>
-                    <BS.Button onClick={this.saveCase}>Save Case</BS.Button>
+                    {this.state.items.map(this.renderItem)}
+                    <BS.Button onClick={this.addBug}>Add Bug</BS.Button>
+                    <BS.Button onClick={this.saveBug}>Save Bug</BS.Button>
                 </div>
             )
         }
     });
 
     var BugItem = React.createClass({
-        handleChange: function () {
+        statusChange: function (value) {
             this.props.onChange({
-                id: this.props.case.id,
+                id: this.props.bug.id,
                 name: this.refs.name.value,
                 step: this.refs.step.value,
-                expc: this.refs.expc.value,
-                actual: this.refs.actual.value,
+                status: value,
+                updateTime: new Date().getTime()
+            });
+        },
+        handleChange: function () {
+            this.props.onChange({
+                id: this.props.bug.id,
+                name: this.refs.name.value,
+                step: this.refs.step.value,
+                status: this.props.bug.status,
                 updateTime: new Date().getTime()
             });
         },
@@ -56,13 +118,15 @@
             return (
                 <div>
                     <label>Bug Name: </label>
-                    <input value={this.props.case.name} onChange={this.handleChange} ref="name"/>
+                    <input value={this.props.bug.name} onChange={this.handleChange} ref="name"/>
                     <br/>
                     <div style={divStyle}>
-                        <label>Step: </label>
-                        <textarea value={this.props.case.step} onChange={this.handleChange} ref="step" style={style}/>
+                        <label>Step:</label>
+                        <textarea value={this.props.bug.step} onChange={this.handleChange} ref="step" style={style}/>
                     </div>
-
+                    <label>Bug Status:</label>
+                    <BugSelect value={this.props.bug.status} onChange={this.statusChange}>
+                    </BugSelect>
                 </div>
             )
         }
