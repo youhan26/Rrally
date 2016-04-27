@@ -18,3 +18,7 @@ require('./../node_modules/firebase/lib/firebase-web');
 // require('./app/js/todoList');
 // require('./../app/story/story');
 require('./../app/backlog/backlog');
+
+
+//common
+require('./../app/common/constant');

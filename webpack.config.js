@@ -3,7 +3,8 @@ module.exports = {
     entry: {
         main: './config/main.js',
         story: './config/story.js',
-        utils: './config/utils.js'
+        utils: './config/utils.js',
+        backlog: './config/backlog.js'
     },
     output: {
         path: __dirname + '/bundle',

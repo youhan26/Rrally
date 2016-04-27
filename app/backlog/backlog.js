@@ -5,76 +5,133 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
+var bs = require('react-bootstrap');
 var constant = require('./../common/constant');
+var Button = bs.Button;
+var Well = bs.Well;
 
-var List = React.createClass({
-    displayName: 'list',
-    render: function () {
-        function renderLi(item) {
-            return <li key={item.key}>{item.name}</li>;
-        }
-
-        return (
-            <div>
-                <ul>{this.props.data.map(renderLi)}</ul>
-            </div>
-        )
-    }
-});
-
-var TodoList = React.createClass({
-    displayName: 'todoList',
+var StoryList = React.createClass({
     getInitialState: function () {
         return {
-            items: [],
-            text: ''
+            items: []
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase(constant.host + '/todoList');
-        this.firebaseRef.on("child_added", function (data) {
-            this.state.items.push(data.val());
+        this.firebaseRef = new Firebase(constant.story);
+        this.loadData();
+    },
+    loadData: function () {
+        this.firebaseRef.once('value', function (snap) {
+            var data = snap.val();
+            var items = [];
+            for (var i in data) {
+                if (data[i].schedule.release == '') {
+                    items.push(data[i]);
+                }
+            }
+            items.sort(function (a, b) {
+                if (a.index && b.index) {
+                    if (a.index < b.index) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    if (a.id < b.id) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
             this.setState({
-                items: this.state.items
+                items: items
             });
         }.bind(this));
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
     },
-    submit: function (e) {
-        e.preventDefault();
-        var date = new Date();
-        this.firebaseRef.push({
-            name: this.state.text,
-            key: new Date().getTime().toString()
+    up: function (data) {
+        var list = this.state.items;
+        var index = list.indexOf(data);
+        if (index == 0) {
+            alert('can move more');
+            return;
+        }
+        var before = list[index - 1];
+        this.firebaseRef.child(data.storyId).update({
+            index: before.index
         });
-        this.state.text = '';
-        this.setState({
-            text: this.state.text
+        this.firebaseRef.child(before.storyId).update({
+            index: data.index
         });
+        this.loadData();
     },
-    textChange: function (e) {
-        this.setState({
-            text: e.target.value
+    down: function (data) {
+        var list = this.state.items;
+        var index = list.indexOf(data);
+        if (index == list.length - 1) {
+            alert('can move more');
+            return;
+        }
+        var after = list[index + 1];
+        this.firebaseRef.child(data.storyId).update({
+            index: after.index
         });
+        this.firebaseRef.child(after.storyId).update({
+            index: data.index
+        });
+        this.loadData();
+    },
+    renderLi: function (item) {
+        return (
+            <StoryItem story={item} key={item.id} up={this.up} down={this.down}>
+            </StoryItem>
+        );
     },
     render: function () {
         return (
             <div>
-                <List data={this.state.items}></List>
-                <form onSubmit={this.submit}>
-                    <input value={this.state.text} onChange={this.textChange}/>
-                    <button>{'Add #' + (this.state.items.length + 1)}</button>
-                </form>
+                {this.state.items.map(this.renderLi)}
             </div>
         )
     }
 });
 
+var StoryItem = React.createClass({
+    goEditPage: function () {
+        var data = this.props.story;
+        if (data.storyId) {
+            window.open(location.host + "/app/story/story.html?id=" + data.storyId, '_blank');
+        }
+    },
+    up: function () {
+        this.props.up(this.props.story);
+    },
+    down: function () {
+        this.props.down(this.props.story);
+    },
+    render: function () {
+        return (
+            <div>
+                <Well className="storyItem">
+                    <Button bsStyle="default" onClick={this.goEditPage}>
+                        {this.props.story.storyId}
+                    </Button> &nbsp;&nbsp;
+                    {this.props.story.basic.name}
+                    <div className="right">
+                        <Button onClick={this.up}>&#8679;</Button>
+                        <Button onClick={this.down}>&#8681;</Button>
+                    </div>
+                </Well>
+            </div>
+        )
+    }
+});
 
 var el = document.getElementById('backlog');
 
-ReactDOM.render(React.createElement(TodoList, null), el);
-
-
+if (el) {
+    ReactDOM.render(React.createElement(StoryList, null), el);
+}
