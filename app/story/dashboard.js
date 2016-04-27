@@ -28,10 +28,23 @@ var StoryList = React.createClass({
     },
     componentWillMount: function () {
         this.firebaseRef = new Firebase(constant.story);
+        this.bugRef = new Firebase(constant.host + '/bug');
         this.firebaseRef.orderByChild('id').on("child_added", function (snap) {
             var data = snap.val();
             if (data && data.action) {
-                this.state.items[data.action - 1].push(data)
+                data.bug = [];
+                this.state.items[data.action - 1].push(data);
+                var index = this.state.items[data.action - 1].length;
+                //TODO need to change for the render
+                this.bugRef.child(data.storyId).once('value', function (snap) {
+                    var bugs = snap.val();
+                    if (bugs) {
+                        this.state.items[data.action - 1][index - 1].bug = bugs;
+                        this.setState({
+                            items: this.state.items
+                        });
+                    }
+                }.bind(this));
             }
             this.setState({
                 items: this.state.items
@@ -41,10 +54,14 @@ var StoryList = React.createClass({
             var data = snap.val();
             if (data.id) {
                 var flag = true;
+
+                var index = 0;
+                data.bug = [];
                 var list = this.state.items[data.action - 1];
                 for (var i in list) {
                     if (list[i].id === data.id) {
                         list[i] = data;
+                        index = i;
                         flag = false;
                         break;
                     }
@@ -56,6 +73,7 @@ var StoryList = React.createClass({
 
                 if (flag) {
                     this.state.items[data.action - 1].push(data);
+                    index = this.state.items[data.action - 1].length - 1;
                     this.state.items[data.action - 1].sort(function (a, b) {
                         if (a.id > b.id) {
                             return 1;
@@ -63,6 +81,16 @@ var StoryList = React.createClass({
                         return -1;
                     });
                 }
+
+                this.bugRef.child(data.storyId).once('value', function (snap) {
+                    var bugs = snap.val();
+                    if (bugs) {
+                        this.state.items[data.action - 1][index].bug = bugs;
+                        this.setState({
+                            items: this.state.items
+                        });
+                    }
+                }.bind(this));
                 this.setState({
                     items: this.state.items
                 });
@@ -154,11 +182,17 @@ var StoryItem = React.createClass({
     clickRight: function () {
         this.props.onRight(this.props.story);
     },
+    renderBugItem: function (item) {
+        return (
+            <div key={item.id}>
+                <span className={item.status>1 ? 'fixed-bug' : 'open-bug'}> {item.name} </span>
+            </div>
+        )
+    },
     render: function () {
         var style = {
             float: 'right'
         };
-
         return (
             <div>
                 <section className="storyItem">
@@ -170,6 +204,8 @@ var StoryItem = React.createClass({
                     <label>Plan Est:</label> {this.props.story.status.planEst}<br/>
                     <label>Task Est:</label> {this.props.story.status.taskEst}<br/>
                     <label>Todo:</label> {this.props.story.status.todo}<br/>
+                    <label>Bugs: {this.props.story.bug.length}</label><br/>
+                    {this.props.story.bug.map(this.renderBugItem)}
                     <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
                     <Button bsStyle="primary" style={style} onClick={this.clickRight}>&gt;</Button>
                 </section>

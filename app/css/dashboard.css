@@ -19,3 +19,11 @@
 .right-button {
     float: right;
 }
+
+.open-bug {
+    color: red;
+}
+
+.fixed-bug {
+    color: green;
+}
