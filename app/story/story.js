@@ -264,6 +264,7 @@ var Story = React.createClass({
                 //update index
                 this.indexRef.child('storyIndex').set(parseInt(index) + 1);
                 data.storyId = storyId;
+                data.index = index;
                 var temp = this;
 
                 saveData(this, data, function () {
