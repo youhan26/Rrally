@@ -16,6 +16,8 @@ require('./../node_modules/firebase/lib/firebase-web');
 // require('./../node_modules/material-ui/lib/tabs');
 
 //app.js
+require('./../app/story/storyTask');
+require('./../app/story/storyCase');
 require('./../app/story/story');
 require('./../app/story/dashboard');
 

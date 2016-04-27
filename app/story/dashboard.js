@@ -155,6 +155,10 @@ var StoryItem = React.createClass({
         this.props.onRight(this.props.story);
     },
     render: function () {
+        var style = {
+            float: 'right'
+        };
+
         return (
             <div>
                 <section className="storyItem">
@@ -167,7 +171,7 @@ var StoryItem = React.createClass({
                     <label>Task Est:</label> {this.props.story.status.taskEst}<br/>
                     <label>Todo:</label> {this.props.story.status.todo}<br/>
                     <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
-                    <Button bsStyle="primary" class="right-button" onClick={this.clickRight}>&gt;</Button>
+                    <Button bsStyle="primary" style={style} onClick={this.clickRight}>&gt;</Button>
                 </section>
             </div>
         )
