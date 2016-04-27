@@ -68,7 +68,7 @@ var StorySchedule = React.createClass({
                            ref="iteration"/>
                     <label>Release : </label>
                     <ReleaseSelect value={this.props.schedule.release} onChange={this.releaseChange}>
-                    </ReleaseSelect>
+                </ReleaseSelect>
                 </section>
             </div>
         )

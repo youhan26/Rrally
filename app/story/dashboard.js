@@ -8,11 +8,13 @@ var Firebase = require('firebase');
 var bs = require('react-bootstrap');
 var Button = bs.Button;
 var constant = require('./../common/constant');
+var ReleaseSelect = require('./../common/releaseSelect');
 
 var StoryList = React.createClass({
     getInitialState: function () {
         return {
-            items: [[], [], [], [], [], []]
+            items: [[], [], [], [], [], []],
+            release: 1
         }
     },
     updateList: function (list, data) {
@@ -26,9 +28,11 @@ var StoryList = React.createClass({
         }
 
     },
-    componentWillMount: function () {
-        this.firebaseRef = new Firebase(constant.story);
-        this.bugRef = new Firebase(constant.host + '/bug');
+    loadData: function () {
+        this.firebaseRef.once('value', function (snap) {
+            var dataList = snap.val();
+
+        });
         this.firebaseRef.orderByChild('id').on("child_added", function (snap) {
             var data = snap.val();
             if (data && data.action) {
@@ -41,76 +45,22 @@ var StoryList = React.createClass({
                     if (bugs) {
                         this.state.items[data.action - 1][index - 1].bug = bugs;
                         this.setState({
-                            items: this.state.items
+                            items: this.state.items,
+                            release: this.state.release
                         });
                     }
                 }.bind(this));
             }
             this.setState({
-                items: this.state.items
+                items: this.state.items,
+                release: this.state.release
             });
         }.bind(this));
-        this.firebaseRef.on('child_changed', function (snap) {
-            var data = snap.val();
-            if (data.id) {
-                var flag = true;
-
-                var index = 0;
-                data.bug = [];
-                var list = this.state.items[data.action - 1];
-                for (var i in list) {
-                    if (list[i].id === data.id) {
-                        list[i] = data;
-                        index = i;
-                        flag = false;
-                        break;
-                    }
-                }
-                var before = this.state.items[data.action - 2];
-                var after = this.state.items[data.action];
-                this.updateList(before, data);
-                this.updateList(after, data);
-
-                if (flag) {
-                    this.state.items[data.action - 1].push(data);
-                    index = this.state.items[data.action - 1].length - 1;
-                    this.state.items[data.action - 1].sort(function (a, b) {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        return -1;
-                    });
-                }
-
-                this.bugRef.child(data.storyId).once('value', function (snap) {
-                    var bugs = snap.val();
-                    if (bugs) {
-                        this.state.items[data.action - 1][index].bug = bugs;
-                        this.setState({
-                            items: this.state.items
-                        });
-                    }
-                }.bind(this));
-                this.setState({
-                    items: this.state.items
-                });
-            }
-        }.bind(this));
-        this.firebaseRef.on('child_removed', function (snap) {
-            var data = snap.val();
-            if (data.id) {
-                var list = this.state.items[data.action - 1];
-                for (var i in list) {
-                    if (list[i].id === data.id) {
-                        list.splice(i, 1);
-                        break;
-                    }
-                }
-                this.setState({
-                    items: this.state.items
-                });
-            }
-        }.bind(this));
+    },
+    componentWillMount: function () {
+        this.firebaseRef = new Firebase(constant.story);
+        this.bugRef = new Firebase(constant.host + '/bug');
+        this.loadData();
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
@@ -127,19 +77,41 @@ var StoryList = React.createClass({
             return;
         }
         this.firebaseRef.child(data.storyId).child('action').set(data.action - 1);
+        //TODO
     },
     onRight: function (data) {
         if (!data || data.action >= 6) {
             alert('ni shi dou bi me? ');
             return;
         }
-
-
         this.firebaseRef.child(data.storyId).child('action').set(data.action + 1);
+        //TODO
+        // var before = this.state.items[data.action - 2];
+        // var after = this.state.items[data.action];
+        // this.updateList(before, data);
+        // this.updateList(after, data);
+        // this.state.items[data.action - 1].sort(function (a, b) {
+        //     if (a.id > b.id) {
+        //         return 1;
+        //     }
+        //     return -1;
+        // });
+    },
+    releaseChange: function (value) {
+        this.setState({
+            items: this.state.items,
+            release: value
+        });
+        this.loadData();
     },
     render: function () {
         return (
             <div>
+                <div>
+                    <label>Select Release</label>
+                    <ReleaseSelect value={this.state.release} onChange={this.releaseChange}>
+                    </ReleaseSelect>
+                </div>
                 <div className="state-div">
                     <h3>定义</h3>
                     {this.state.items[0].map(this.renderLi)}
