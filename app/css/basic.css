@@ -1,3 +1,7 @@
 .right {
     float: right;
 }
+
+.name-input {
+    width: 400px;
+}

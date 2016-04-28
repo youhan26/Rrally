@@ -3,37 +3,11 @@
  */
 (function () {
     var React = require('react');
-    var Firebase = require('firebase');
     var BS = require('react-bootstrap');
+    var Button = BS.Button;
     var BugSelect = require('./../common/bugSelect');
-    var constant = require('./../common/constant');
 
     var Bug = React.createClass({
-        getInitialState: function () {
-            var search = window.location.search;
-            if (search) {
-                var result = search.match(/id=([\w]*)/);
-                if (result.length > 1) {
-                    this.storyId = result[1];
-                }
-            }
-            return {
-                items: []
-            }
-        },
-        componentWillMount: function () {
-            this.firebaseRef = new Firebase(constant.host + '/bug');
-            if (this.storyId) {
-                this.firebaseRef.orderByKey().equalTo(this.storyId).once('value', function (snap) {
-                    var data = snap.val();
-                    if (data && data[this.storyId]) {
-                        this.setState({
-                            items: data[this.storyId]
-                        });
-                    }
-                }.bind(this));
-            }
-        },
         componentWillUnmount: function () {
             this.firebaseRef.off();
         },
@@ -45,45 +19,20 @@
             )
         },
         saveBug: function () {
-            if (this.storyId) {
-                this.firebaseRef.child(this.storyId).set(this.state.items, function (error) {
-                    if (!error) {
-                        alert('succ!');
-                    }
-                });
-                return;
-            }
-            alert('add a story first!');
+            this.props.saveAll();
         },
         onChange: function (data) {
-            var list = this.state.items;
-            for (var i in list) {
-                if (list[i].id == data.id) {
-                    list[i] = data;
-                    break;
-                }
-            }
-            this.setState({
-                items: list
-            });
+            this.props.onChange(data);
         },
         addBug: function () {
-            this.state.items.push({
-                id: new Date().getTime().toString(),
-                name: '',
-                step: '',
-                status: 1
-            });
-            this.setState({
-                items: this.state.items
-            });
+            this.props.onAdd();
         },
         render: function () {
             return (
                 <div>
-                    {this.state.items.map(this.renderItem)}
-                    <BS.Button onClick={this.addBug}>Add Bug</BS.Button>
-                    <BS.Button onClick={this.saveBug}>Save Bug</BS.Button>
+                    {this.props.bug.map(this.renderItem)}
+                    <Button onClick={this.addBug}>Add Bug</Button>
+                    <Button onClick={this.saveBug}>Save Bug</Button>
                 </div>
             )
         }

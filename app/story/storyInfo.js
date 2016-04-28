@@ -123,7 +123,8 @@
                 <div>
                     <form>
                         <labe>Story Name:</labe>
-                        <input ref="name" onChange={this.handleChange} value={this.props.basic.name}/>
+                        <input className="name-input" ref="name" onChange={this.handleChange}
+                               value={this.props.basic.name}/>
                         <Button onClick={this.click} bsStyle="primary" bsSize="small">
                             {this.props.id ? 'Edit Story' : 'Create Story'}
                         </Button>

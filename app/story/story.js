@@ -59,7 +59,8 @@ var Story = React.createClass({
                     release: ''
                 },
                 task: [],
-                case: []
+                case: [],
+                bug: []
             }
         }
     },
@@ -104,6 +105,9 @@ var Story = React.createClass({
                     if (!story.case) {
                         story.case = [];
                     }
+                    if (!story.bug) {
+                        story.bug = [];
+                    }
                     this.setState({
                         story: story
                     });
@@ -123,10 +127,10 @@ var Story = React.createClass({
             return;
         }
         if (data.storyId) {
-            //new story
+            //udpate story
             saveData(this, data)
         } else {
-            //udpate story
+            //save new story
             data.id = new Date().getTime().toString();
             data.action = 1;
             this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
@@ -221,6 +225,36 @@ var Story = React.createClass({
             story: this.state.story
         });
     },
+    addBug: function () {
+        this.state.story.bug.push({
+            id: new Date().getTime().toString(),
+            name: '',
+            step: '',
+            status: 1
+        });
+        this.setState({
+            story: this.state.story
+        });
+    },
+    bugChange: function (data) {
+        var list = this.state.story.bug;
+        for (var i in list) {
+            if (list[i].id === data.id) {
+                list[i] = data;
+                break;
+            }
+        }
+        this.setState({
+            story: this.state.story
+        });
+    },
+    saveBug: function () {
+        this.firebaseRef.child(this.state.story.storyId).child('bug').update(this.state.story.bug, function (error) {
+            if (!error) {
+                alert('succ!');
+            }
+        });
+    },
     render: function () {
         return (
             <div>
@@ -253,7 +287,9 @@ var Story = React.createClass({
                         </Case>
                     </Tab>
                     <Tab eventKey={4} title="Bug">
-                        <Bug storyId={this.state.story.storyId}></Bug>
+                        <Bug saveAll={this.saveBug} bug={this.state.story.bug} onAdd={this.addBug}
+                             onChange={this.bugChange}>
+                        </Bug>
                     </Tab>
                 </Tabs>
             </div>
