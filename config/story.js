@@ -19,6 +19,7 @@ require('./../node_modules/firebase/lib/firebase-web');
 require('./../app/story/storyTask');
 require('./../app/story/storyCase');
 require('./../app/story/storyBug');
+require('./../app/story/storyInfo');
 require('./../app/story/story');
 require('./../app/story/dashboard');
 
