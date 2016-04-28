@@ -36,20 +36,10 @@ var StoryList = React.createClass({
                 for (var i in dataList) {
                     var data = dataList[i];
                     if (data && data.action && data.schedule.release.toString() == this.state.release.toString()) {
-                        data.bug = [];
+                        if (!data.bug) {
+                            data.bug = [];
+                        }
                         this.state.items[data.action - 1].push(data);
-                        var index = this.state.items[data.action - 1].length;
-                        //TODO need to change for the render
-                        this.bugRef.child(data.storyId).once('value', function (snap) {
-                            var bugs = snap.val();
-                            if (bugs && this.state.items[data.action - 1][index - 1]) {
-                                this.state.items[data.action - 1][index - 1].bug = bugs;
-                                this.setState({
-                                    items: this.state.items,
-                                    release: this.state.release
-                                });
-                            }
-                        }.bind(this));
                     }
                 }
             }
@@ -77,26 +67,22 @@ var StoryList = React.createClass({
             alert('ni shi dou bi me? ');
             return;
         }
-        this.firebaseRef.child(data.storyId).child('action').set(data.action - 1);
-        //TODO
+        this.firebaseRef.child(data.storyId).child('action').set(data.action - 1, function (error) {
+            if (!error) {
+                this.loadData();
+            }
+        }.bind(this));
     },
     onRight: function (data) {
         if (!data || data.action >= 6) {
             alert('ni shi dou bi me? ');
             return;
         }
-        this.firebaseRef.child(data.storyId).child('action').set(data.action + 1);
-        //TODO
-        // var before = this.state.items[data.action - 2];
-        // var after = this.state.items[data.action];
-        // this.updateList(before, data);
-        // this.updateList(after, data);
-        // this.state.items[data.action - 1].sort(function (a, b) {
-        //     if (a.id > b.id) {
-        //         return 1;
-        //     }
-        //     return -1;
-        // });
+        this.firebaseRef.child(data.storyId).child('action').set(data.action + 1, function (error) {
+            if (!error) {
+                this.loadData();
+            }
+        }.bind(this));
     },
     releaseChange: function (value) {
         this.setState({
