@@ -8,7 +8,8 @@
         host: 'https://fuckme.firebaseio.com',
         story: 'https://fuckme.firebaseio.com/story',
         index: 'https://fuckme.firebaseio.com/index',
-        release: 'https://fuckme.firebaseio.com/release'
+        release: 'https://fuckme.firebaseio.com/release',
+        bug: 'https://fuckme.firebaseio.com/bug'
     };
 
     module.exports = constant;
