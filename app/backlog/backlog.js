@@ -103,7 +103,7 @@ var StoryItem = React.createClass({
     goEditPage: function () {
         var data = this.props.story;
         if (data.storyId) {
-            window.open(location.host + "/app/story/story.html?id=" + data.storyId, '_blank');
+            window.open('http://' + location.host + "/app/story/story.html?id=" + data.storyId, '_blank');
         }
     },
     up: function () {
