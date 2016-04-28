@@ -123,8 +123,10 @@ var Story = React.createClass({
             return;
         }
         if (data.storyId) {
+            //new story
             saveData(this, data)
         } else {
+            //udpate story
             data.id = new Date().getTime().toString();
             data.action = 1;
             this.indexRef.orderByKey().equalTo('storyIndex').once('value', function (snap) {
