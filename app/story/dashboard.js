@@ -14,7 +14,7 @@ var StoryList = React.createClass({
     getInitialState: function () {
         return {
             items: [[], [], [], [], [], []],
-            release: 1
+            release: ''
         }
     },
     updateList: function (list, data) {
@@ -30,30 +30,31 @@ var StoryList = React.createClass({
     },
     loadData: function () {
         this.firebaseRef.once('value', function (snap) {
+            this.state.items = [[], [], [], [], [], []];
             var dataList = snap.val();
-
-        });
-        this.firebaseRef.orderByChild('id').on("child_added", function (snap) {
-            var data = snap.val();
-            if (data && data.action) {
-                data.bug = [];
-                this.state.items[data.action - 1].push(data);
-                var index = this.state.items[data.action - 1].length;
-                //TODO need to change for the render
-                this.bugRef.child(data.storyId).once('value', function (snap) {
-                    var bugs = snap.val();
-                    if (bugs) {
-                        this.state.items[data.action - 1][index - 1].bug = bugs;
-                        this.setState({
-                            items: this.state.items,
-                            release: this.state.release
-                        });
+            if (dataList) {
+                for (var i in dataList) {
+                    var data = dataList[i];
+                    if (data && data.action && data.schedule.release.toString() == this.state.release.toString()) {
+                        data.bug = [];
+                        this.state.items[data.action - 1].push(data);
+                        var index = this.state.items[data.action - 1].length;
+                        //TODO need to change for the render
+                        this.bugRef.child(data.storyId).once('value', function (snap) {
+                            var bugs = snap.val();
+                            if (bugs && this.state.items[data.action - 1][index - 1]) {
+                                this.state.items[data.action - 1][index - 1].bug = bugs;
+                                this.setState({
+                                    items: this.state.items,
+                                    release: this.state.release
+                                });
+                            }
+                        }.bind(this));
                     }
-                }.bind(this));
+                }
             }
             this.setState({
-                items: this.state.items,
-                release: this.state.release
+                items: this.state.items
             });
         }.bind(this));
     },
@@ -108,7 +109,7 @@ var StoryList = React.createClass({
         return (
             <div>
                 <div>
-                    <label>Select Release</label>
+                    <label>Select Release: </label>
                     <ReleaseSelect value={this.state.release} onChange={this.releaseChange}>
                     </ReleaseSelect>
                 </div>
