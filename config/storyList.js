@@ -22,3 +22,4 @@ require('./../app/backlog/storyList');
 //common
 require('./../app/common/config');
 require('./../app/common/constant');
+require('./../app/common/releaseSelect');

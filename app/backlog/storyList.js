@@ -10,11 +10,13 @@ var config = require('./../common/config');
 var constant = require('./../common/constant');
 var Button = bs.Button;
 var Well = bs.Well;
+var ReleaseSelect = require('./../common/releaseSelect');
 
 var StoryList = React.createClass({
     getInitialState: function () {
         return {
-            items: []
+            items: [],
+            release: ''
         }
     },
     componentWillMount: function () {
@@ -39,7 +41,7 @@ var StoryList = React.createClass({
         }
         return '';
     },
-    loadData: function () {
+    loadData: function (withFilter) {
         this.firebaseRef.once('value', function (snap) {
             var data = snap.val();
             var items = [];
@@ -50,7 +52,13 @@ var StoryList = React.createClass({
                 if (data[i].action) {
                     data[i].actionName = constant.storyStatus[data[i].action - 1].name;
                 }
-                items.push(data[i]);
+                if (withFilter) {
+                    if (data[i].schedule.release.toString() === this.state.release.toString()) {
+                        items.push(data[i]);
+                    }
+                } else {
+                    items.push(data[i]);
+                }
             }
             items.sort(function (a, b) {
                 if (a.id < b.id) {
@@ -60,7 +68,8 @@ var StoryList = React.createClass({
                 }
             });
             this.setState({
-                items: items
+                items: items,
+                release: this.state.release
             });
         }.bind(this));
     },
@@ -73,9 +82,23 @@ var StoryList = React.createClass({
             </StoryItem>
         );
     },
+    releaseChange: function (value) {
+        this.setState({
+            release: value,
+            items: this.state.items
+        });
+    },
+    filter: function () {
+        this.loadData(true);
+    },
     render: function () {
         return (
             <div>
+                <label>Release :</label>
+                <ReleaseSelect value={this.state.release} onChange={this.releaseChange}></ReleaseSelect>
+
+                <Button onClick={this.filter}>Filter: </Button>
+                <Button onClick={this.loadData}>Reset: </Button>
                 {this.state.items.map(this.renderLi)}
             </div>
         )
