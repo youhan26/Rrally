@@ -6,7 +6,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var firebase = require('firebase');
-var constant = require('./../common/constant');
+var constant = require('./../common/config');
 
 
 var AddChild = React.createClass({

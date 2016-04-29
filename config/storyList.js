@@ -16,9 +16,9 @@ require('./../node_modules/firebase/lib/firebase-web');
 //app.js
 // require('./app/js/app');
 // require('./app/js/todoList');
-require('./../app/utils/addChild');
-require('./../app/utils/addRelease');
-require('./../app/utils/bugChange');
+// require('./../app/story/story');
+require('./../app/backlog/storyList');
 
 //common
 require('./../app/common/config');
+require('./../app/common/constant');

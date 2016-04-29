@@ -7,7 +7,7 @@ var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
 var bs = require('react-bootstrap');
 var Button = bs.Button;
-var constant = require('./../common/constant');
+var constant = require('./../common/config');
 
 var StoryList = React.createClass({
     getInitialState: function () {

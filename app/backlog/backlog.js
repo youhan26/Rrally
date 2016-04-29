@@ -6,7 +6,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
 var bs = require('react-bootstrap');
-var constant = require('./../common/constant');
+var constant = require('./../common/config');
 var Button = bs.Button;
 var Well = bs.Well;
 

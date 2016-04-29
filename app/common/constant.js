@@ -5,12 +5,26 @@
 (function () {
 
     var constant = {
-        host: 'https://fuckme.firebaseio.com',
-        story: 'https://fuckme.firebaseio.com/story',
-        index: 'https://fuckme.firebaseio.com/index',
-        release: 'https://fuckme.firebaseio.com/release',
-        bug: 'https://fuckme.firebaseio.com/bug'
-    };
+        storyStatus: [{
+            name: '定义',
+            value: 1
+        }, {
+            name: '开发中',
+            value: 2
+        }, {
+            name: '开发完成',
+            value: 3
+        }, {
+            name: '测试中',
+            value: 4
+        }, {
+            name: '测试完成',
+            value: 5
+        }, {
+            name: '上线',
+            value: 6
+        }]
 
+    };
     module.exports = constant;
 })();

@@ -6,7 +6,7 @@
 
     var React = require('react');
     var firebase = require('firebase');
-    var constant = require('./constant');
+    var constant = require('./config');
 
     var ReleaseSelect = React.createClass({
         onChange: function () {

@@ -6,7 +6,7 @@ var ReactDOM = require('react-dom');
 var firebase = require('firebase');
 var bs = require('react-bootstrap');
 var BUTTON = bs.Button;
-var constant = require('./../common/constant');
+var constant = require('./../common/config');
 
 var BugChange = React.createClass({
     componentWillMount: function () {

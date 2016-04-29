@@ -26,5 +26,5 @@ require('./../app/story/dashboard');
 
 //common component
 require('./../app/common/releaseSelect');
-require('./../app/common/constant');
+require('./../app/common/config');
 require('./../app/common/bugSelect');
