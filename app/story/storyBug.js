@@ -8,6 +8,11 @@
     var BugSelect = require('./../common/bugSelect');
 
     var Bug = React.createClass({
+        getDefaultProps: function () {
+            return {
+                bug: []
+            }
+        },
         componentWillUnmount: function () {
             this.firebaseRef.off();
         },
@@ -39,6 +44,13 @@
     });
 
     var BugItem = React.createClass({
+        getDefaultProps: function () {
+            return {
+                name: '',
+                step: '',
+                status: 1
+            }
+        },
         statusChange: function (value) {
             this.props.onChange({
                 id: this.props.bug.id,

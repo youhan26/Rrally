@@ -8,13 +8,12 @@ var Firebase = require('firebase');
 var bs = require('react-bootstrap');
 var Button = bs.Button;
 var constant = require('./../common/constant');
-var ReleaseSelect = require('./../common/releaseSelect');
 
 var StoryList = React.createClass({
     getInitialState: function () {
+        this.curRelease = '';
         return {
-            items: [[], [], [], [], [], []],
-            release: ''
+            items: [[], [], [], [], [], []]
         }
     },
     updateList: function (list, data) {
@@ -35,7 +34,7 @@ var StoryList = React.createClass({
             if (dataList) {
                 for (var i in dataList) {
                     var data = dataList[i];
-                    if (data && data.action && data.schedule.release.toString() == this.state.release.toString()) {
+                    if (data && data.action && data.schedule.release.toString() == this.curRelease.toString()) {
                         if (!data.bug) {
                             data.bug = [];
                         }
@@ -50,11 +49,21 @@ var StoryList = React.createClass({
     },
     componentWillMount: function () {
         this.firebaseRef = new Firebase(constant.story);
-        this.bugRef = new Firebase(constant.host + '/bug');
-        this.loadData();
+        this.ref = new Firebase(constant.host);
+        this.ref.child('index').child('releaseIndex').once('value', function (snap) {
+            this.ref.child('release').child(snap.val() - 1).once('value', function (tt) {
+                var value = tt.val();
+                if (value) {
+                    this.curRelease = value.id;
+                    this.curReleaseName = value.name;
+                }
+                this.loadData();
+            }.bind(this));
+        }.bind(this));
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
+        this.indexRef.off();
     },
     renderLi: function (item) {
         return (
@@ -84,20 +93,21 @@ var StoryList = React.createClass({
             }
         }.bind(this));
     },
-    releaseChange: function (value) {
-        this.setState({
-            items: this.state.items,
-            release: value
-        });
-        this.loadData();
-    },
+    // releaseChange: function (value) {
+    //     this.setState({
+    //         items: this.state.items,
+    //         release: value
+    //     });
+    //     this.loadData();
+    // },
     render: function () {
         return (
             <div>
                 <div>
-                    <label>Select Release: </label>
-                    <ReleaseSelect value={this.state.release} onChange={this.releaseChange}>
-                    </ReleaseSelect>
+                    <h4>
+                        <label>Current Release: </label>
+                        {this.curReleaseName}
+                    </h4>
                 </div>
                 <div className="state-div">
                     <h3>定义</h3>
