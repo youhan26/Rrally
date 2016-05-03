@@ -10,7 +10,8 @@ var config = require('./../common/config');
 var constant = require('./../common/constant');
 var Button = bs.Button;
 var Well = bs.Well;
-var ReleaseSelect = require('./../common/releaseSelect');
+var LIST = require('./../common/customerList');
+var ReleaseSelect = LIST.ReleaseSelect;
 
 var StoryList = React.createClass({
     getInitialState: function () {

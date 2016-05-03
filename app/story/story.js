@@ -113,6 +113,7 @@ var Story = React.createClass({
                         story.bug = [];
                     }
                     var basic = story.basic;
+                    //handle old data
                     basic.pm = basic.pm || '';
                     basic.rd = basic.rd || '';
                     basic.fe = basic.fe || '';

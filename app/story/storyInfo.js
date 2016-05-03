@@ -3,8 +3,10 @@
  */
 (function () {
     var React = require('react');
-    var ReleaseSelect = require('./../common/releaseSelect');
-    var MemberList = require('./../common/memberList');
+    var LIST = require('./../common/customerList');
+    var ReleaseSelect = LIST.ReleaseSelect;
+    var MemberList = LIST.MemberList;
+    var ProjectList = LIST.ProjectList;
     var BS = require('react-bootstrap');
     var Button = BS.Button;
 
@@ -20,10 +22,18 @@
                 this.props.schedule.release
             );
         },
+        projectChange: function (value) {
+            var ref = this.refs;
+            this.props.scheduleChange(
+                value,
+                ref.iteration.value,
+                this.props.schedule.release
+            );
+        },
         releaseChange: function (value) {
             var ref = this.refs;
             this.props.scheduleChange(
-                ref.project.value,
+                this.props.schedule.project,
                 ref.iteration.value,
                 value
             );
@@ -37,13 +47,7 @@
                     <section>
                         <h2>Story Schedule</h2>
                         <label>Project Name: </label>
-                        <select value={this.props.schedule.project} onChange={this.handleChange}
-                                ref="project">
-                            <option value="rally">Rrally</option>
-                            <option value="haijie">嗨街</option>
-                            <option value="dsplug">DSPLUG</option>
-                            <option value="social">DSPLUG-social</option>
-                        </select>
+                        <ProjectList onChange={this.projectChange} value={this.props.schedule.project}></ProjectList>
                         <label>Iteration :</label>
                         <input value={this.props.schedule.iteration} onChange={this.handleChange}
                                ref="iteration"/>

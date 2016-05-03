@@ -1,7 +1,6 @@
 module.exports = {
     // entry: './entry.js',
     entry: {
-        main: './config/main.js',
         story: './config/story.js',
         utils: './config/utils.js',
         backlog: './config/backlog.js',

@@ -5,10 +5,10 @@
 (function () {
 
     var React = require('react');
-    var firebase = require('firebase');
+    var Firebase = require('firebase');
     var constant = require('./config');
 
-    var ReleaseSelect = React.createClass({
+    var BasicList = React.createClass({
         onChange: function () {
             if (this.props.onChange) {
                 this.props.onChange(this.refs.release.value);
@@ -19,8 +19,10 @@
                 items: []
             }
         },
+
         componentWillMount: function () {
-            this.firebaseRef = new firebase(constant.release);
+            var dataList = this.props.dataList;
+            this.firebaseRef = new Firebase(constant.host + '/' + dataList);
             this.firebaseRef.once('value', function (snap) {
                 var value = snap.val();
                 if (value) {
@@ -49,6 +51,42 @@
             )
         }
     });
+    var ProjectList = React.createClass({
+        onChange: function (data) {
+            this.props.onChange(data);
+        },
+        render: function () {
+            return (
+                <BasicList dataList="project" value={this.props.value} onChange={this.onChange}></BasicList>
+            )
+        }
+    });
 
-    module.exports = ReleaseSelect;
+    var ReleaseSelect = React.createClass({
+        onChange: function (data) {
+            this.props.onChange(data);
+        },
+        render: function () {
+            return (
+                <BasicList dataList="release" value={this.props.value} onChange={this.onChange}></BasicList>
+            )
+        }
+    });
+
+    var MemberList = React.createClass({
+        onChange: function (data) {
+            this.props.onChange(data);
+        },
+        render: function () {
+            return (
+                <BasicList dataList="member" value={this.props.value} onChange={this.onChange}></BasicList>
+            )
+        }
+    });
+
+    module.exports = {
+        ProjectList: ProjectList,
+        ReleaseSelect: ReleaseSelect,
+        MemberList: MemberList
+    };
 })();
