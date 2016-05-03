@@ -8,10 +8,13 @@ var Firebase = require('firebase');
 var bs = require('react-bootstrap');
 var Button = bs.Button;
 var constant = require('./../common/config');
+var LIST = require('./../common/customerList');
+var ProjectList = LIST.ProjectList;
 
 var StoryList = React.createClass({
     getInitialState: function () {
         this.curRelease = '';
+        this.curProject = 4;
         return {
             items: [[], [], [], [], [], []]
         }
@@ -34,7 +37,8 @@ var StoryList = React.createClass({
             if (dataList) {
                 for (var i in dataList) {
                     var data = dataList[i];
-                    if (data && data.action && data.schedule.release.toString() == this.curRelease.toString()) {
+                    if (data && data.action && data.schedule.release.toString() == this.curRelease.toString()
+                        && data.schedule.project.toString() == this.curProject.toString()) {
                         if (!data.bug) {
                             data.bug = [];
                         }
@@ -93,13 +97,10 @@ var StoryList = React.createClass({
             }
         }.bind(this));
     },
-    // releaseChange: function (value) {
-    //     this.setState({
-    //         items: this.state.items,
-    //         release: value
-    //     });
-    //     this.loadData();
-    // },
+    projectChange: function (value) {
+        this.curProject = value;
+        this.loadData();
+    },
     render: function () {
         return (
             <div>
@@ -107,6 +108,9 @@ var StoryList = React.createClass({
                     <h4>
                         <label>Current Release: </label>
                         {this.curReleaseName}
+                        &nbsp;&nbsp;
+                        <label>Select Project:</label>
+                        <ProjectList value={this.curProject} onChange={this.projectChange}></ProjectList>
                     </h4>
                 </div>
                 <div className="state-div">
