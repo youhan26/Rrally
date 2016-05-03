@@ -149,10 +149,10 @@
                 name: this.refs.name.value,
                 desc: this.refs.desc.value,
                 note: this.refs.note.value,
-                pm: this.props.basic.pm,
-                rd: this.props.basic.rd,
-                fe: this.props.basic.fe,
-                qa: this.props.basic.qa
+                pm: this.props.basic.pm || '',
+                rd: this.props.basic.rd || '',
+                fe: this.props.basic.fe || '',
+                qa: this.props.basic.qa || ''
             };
             data[field] = value;
             return data;
