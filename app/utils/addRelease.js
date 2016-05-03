@@ -32,7 +32,7 @@ var Release = React.createClass({
                 id: new Date().getTime()
             };
 
-            me.firebaseRef.child(data.id).set(data, function (error) {
+            me.firebaseRef.child(index).set(data, function (error) {
                 if (!error) {
                     me.indexRef.child('releaseIndex').set(parseInt(index) + 1);
                     alert('succ!');
