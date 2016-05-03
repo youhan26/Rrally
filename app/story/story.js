@@ -46,7 +46,11 @@ var Story = React.createClass({
                 basic: {
                     name: '',
                     desc: '',
-                    note: ''
+                    note: '',
+                    pm: '',
+                    qa: '',
+                    fe: '',
+                    rd: ''
                 },
                 status: {
                     planEst: 0,
@@ -108,6 +112,11 @@ var Story = React.createClass({
                     if (!story.bug) {
                         story.bug = [];
                     }
+                    var basic = story.basic;
+                    basic.pm = basic.pm || '';
+                    basic.rd = basic.rd || '';
+                    basic.fe = basic.fe || '';
+                    basic.qa = basic.qa || '';
                     this.setState({
                         story: story
                     });
