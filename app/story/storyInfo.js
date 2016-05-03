@@ -4,6 +4,7 @@
 (function () {
     var React = require('react');
     var ReleaseSelect = require('./../common/releaseSelect');
+    var MemberList = require('./../common/memberList');
     var BS = require('react-bootstrap');
     var Button = BS.Button;
 
@@ -111,8 +112,37 @@
             this.props.basicChange({
                 name: this.refs.name.value,
                 desc: this.refs.desc.value,
-                note: this.refs.note.value
+                note: this.refs.note.value,
+                pm: this.props.basic.pm,
+                rd: this.props.basic.rd,
+                fe: this.props.basic.fe,
+                qa: this.props.basic.qa
             });
+        },
+        pmChange: function (value) {
+            this.props.basicChange(this.getChangeData(value, 'pm'));
+        },
+        rdChange: function (value) {
+            this.props.basicChange(this.getChangeData(value, 'rd'));
+        },
+        feChange: function (value) {
+            this.props.basicChange(this.getChangeData(value, 'fe'));
+        },
+        qaChange: function (value) {
+            this.props.basicChange(this.getChangeData(value, 'qa'));
+        },
+        getChangeData: function (value, field) {
+            var data = {
+                name: this.refs.name.value,
+                desc: this.refs.desc.value,
+                note: this.refs.note.value,
+                pm: this.props.basic.pm,
+                rd: this.props.basic.rd,
+                fe: this.props.basic.fe,
+                qa: this.props.basic.qa
+            };
+            data[field] = value;
+            return data;
         },
         render: function () {
             var textStyle = {
@@ -135,6 +165,15 @@
                         <h3>Notes:</h3>
                     <textarea row="10" ref="note" onChange={this.handleChange}
                               value={this.props.basic.note} style={textStyle}></textarea>
+                        <h3>Owners:</h3>
+                        <label>PM:</label>
+                        <MemberList value={this.props.basic.pm} onChange={this.pmChange}></MemberList>
+                        <label>RD:</label>
+                        <MemberList value={this.props.basic.rd} onChange={this.rdChange}></MemberList>
+                        <label>FE:</label>
+                        <MemberList value={this.props.basic.fe} onChange={this.feChange}></MemberList>
+                        <label>QA:</label>
+                        <MemberList value={this.props.basic.qa} onChange={this.qaChange}></MemberList>
                     </form>
                 </div>
             )

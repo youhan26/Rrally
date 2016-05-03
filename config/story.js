@@ -28,3 +28,4 @@ require('./../app/story/dashboard');
 require('./../app/common/releaseSelect');
 require('./../app/common/config');
 require('./../app/common/bugSelect');
+require('./../app/common/memberList');
