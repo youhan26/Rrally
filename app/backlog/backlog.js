@@ -100,12 +100,6 @@ var StoryList = React.createClass({
 });
 
 var StoryItem = React.createClass({
-    goEditPage: function () {
-        var data = this.props.story;
-        if (data.storyId) {
-            window.open('http://' + location.host + "/app/story/story.html?id=" + data.storyId, '_blank');
-        }
-    },
     up: function () {
         this.props.up(this.props.story);
     },
@@ -116,9 +110,12 @@ var StoryItem = React.createClass({
         return (
             <div>
                 <Well className="storyItem">
-                    <Button bsStyle="default" onClick={this.goEditPage}>
-                        {this.props.story.storyId}
-                    </Button> &nbsp;&nbsp;
+                    <a href={'../story/story.html?id=' + this.props.story.storyId} target="_blank">
+                        <Button bsStyle="default" onClick={this.goEditPage}>
+                            {this.props.story.storyId}
+                        </Button>
+                    </a>
+                    &nbsp;&nbsp;
                     {this.props.story.basic.name}
                     <div className="right">
                         <Button onClick={this.up}>&#8679;</Button>

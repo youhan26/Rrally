@@ -96,7 +96,6 @@ var StoryList = React.createClass({
             <div>
                 <label>Release :</label>
                 <ReleaseSelect value={this.state.release} onChange={this.releaseChange}></ReleaseSelect>
-
                 <Button onClick={this.filter}>Filter: </Button>
                 <Button onClick={this.loadData}>Reset: </Button>
                 {this.state.items.map(this.renderLi)}
@@ -106,19 +105,16 @@ var StoryList = React.createClass({
 });
 
 var StoryItem = React.createClass({
-    goEditPage: function () {
-        var data = this.props.story;
-        if (data.storyId) {
-            window.open('http://' + location.host + "/app/story/story.html?id=" + data.storyId, '_blank');
-        }
-    },
     render: function () {
         return (
             <div>
                 <Well className="storyItem">
-                    <Button bsStyle="default" onClick={this.goEditPage}>
-                        {this.props.story.storyId}
-                    </Button> &nbsp;&nbsp;
+                    <a href={'../story/story.html?id=' + this.props.story.storyId} target="_blank">
+                        <Button bsStyle="default" onClick={this.goEditPage}>
+                            {this.props.story.storyId}
+                        </Button>
+                    </a>
+                    &nbsp;&nbsp;
                     {this.props.story.schedule.releaseName}
                     &nbsp;&nbsp;
                     {this.props.story.actionName}
