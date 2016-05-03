@@ -101,6 +101,19 @@
 
 
     var StoryBasic = React.createClass({
+        getDefaultProps: function () {
+            return {
+                basic: {
+                    name: '',
+                    desc: '',
+                    note: '',
+                    pm: '',
+                    rd: '',
+                    fe: '',
+                    qa: ''
+                }
+            };
+        },
         click: function () {
             this.props.onCreate({
                 name: this.refs.name.value,
