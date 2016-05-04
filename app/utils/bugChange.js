@@ -29,7 +29,6 @@ var BugChange = React.createClass({
                             // this.firebaseRef.child(story.storyId).child('bug').set([]);
                             console.log('set [] once');
                         } else if (bug) {
-                            debugger;
                             me.firebaseRef.child(s.storyId).child('bug').set(bug);
                             console.log('set bug once');
                         } else {

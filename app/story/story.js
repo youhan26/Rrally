@@ -70,9 +70,9 @@ var Story = React.createClass({
     },
     statusChange: function (plan, task, todo) {
         this.state.story.status = {
-            planEst: parseInt(plan),
-            taskEst: parseInt(task),
-            todo: parseInt(todo)
+            planEst: parseFloat(plan),
+            taskEst: parseFloat(task),
+            todo: parseFloat(todo)
         };
         this.setState({
             story: this.state.story
@@ -271,21 +271,15 @@ var Story = React.createClass({
                 <h2>{this.state.story.storyId}</h2>
                 <Tabs defaultActiveKey={1} animation={false} id="storyDetailTabs">
                     <Tab eventKey={1} title="Story ">
-                        <BS.Well>
-                            <StoryBasic onCreate={this.create} basicChange={this.basicChange}
-                                        basic={this.state.story.basic} id={this.state.story.id}>
-                            </StoryBasic>
-                        </BS.Well>
+                        <StoryBasic onCreate={this.create} basicChange={this.basicChange}
+                                    basic={this.state.story.basic} id={this.state.story.id}>
+                        </StoryBasic>
                         <Attachments></Attachments>
-                        <BS.Well>
-                            <StorySchedule schedule={this.state.story.schedule}
-                                           scheduleChange={this.scheduleChange}>
-                            </StorySchedule>
-                        </BS.Well>
-                        <BS.Well>
-                            <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
-                            </StoryStatus>
-                        </BS.Well>
+                        <StorySchedule schedule={this.state.story.schedule}
+                                       scheduleChange={this.scheduleChange}>
+                        </StorySchedule>
+                        <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
+                        </StoryStatus>
                     </Tab>
                     <Tab eventKey={2} title="Task">
                         <Task saveAll={this.create} task={this.state.story.task} onAdd={this.addTask}

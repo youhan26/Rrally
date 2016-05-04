@@ -7,18 +7,20 @@
     var ReleaseSelect = LIST.ReleaseSelect;
     var MemberList = LIST.MemberList;
     var ProjectList = LIST.ProjectList;
-    var BS = require('react-bootstrap');
-    var Button = BS.Button;
+    var MD = require('material-ui');
+    var TextField = MD.TextField;
+    var Card = MD.Card;
+    var CardText = MD.CardText;
+    var FlatButton = MD.FlatButton;
 
     /**
      * story schedule include release version, iteration and so on
      */
     var StorySchedule = React.createClass({
-        handleChange: function () {
-            var ref = this.refs;
+        iterationChange: function (e) {
             this.props.scheduleChange(
                 ref.project.value,
-                ref.iteration.value,
+                e.target.value,
                 this.props.schedule.release
             );
         },
@@ -38,23 +40,23 @@
                 value
             );
         },
-        /**
-         * @returns {XML}
-         */
         render: function () {
             return (
                 <div>
-                    <section>
-                        <h2>Story Schedule</h2>
-                        <label>Project Name: </label>
-                        <ProjectList onChange={this.projectChange} value={this.props.schedule.project}></ProjectList>
-                        <label>Iteration :</label>
-                        <input value={this.props.schedule.iteration} onChange={this.handleChange}
-                               ref="iteration"/>
-                        <label>Release : </label>
-                        <ReleaseSelect value={this.props.schedule.release} onChange={this.releaseChange}>
-                        </ReleaseSelect>
-                    </section>
+                    <Card>
+                        <CardText>
+                            <h3>Story Schedule</h3>
+                            <label>Project Name: </label>
+                            <ProjectList onChange={this.projectChange}
+                                         value={this.props.schedule.project}></ProjectList>
+                            <TextField value={this.props.schedule.iteration}
+                                       floatingLabelText="Iteration"
+                                       onChange={this.iterationChange}/>
+                            <label>Release : </label>
+                            <ReleaseSelect value={this.props.schedule.release} onChange={this.releaseChange}>
+                            </ReleaseSelect>
+                        </CardText>
+                    </Card>
                 </div>
             )
         }
@@ -75,7 +77,7 @@
         },
         handleChange: function (e) {
             this.props.statusChange(
-                this.refs.plan.value,
+                e.target.value,
                 this.props.status.taskEst,
                 this.props.status.todo
             );
@@ -87,17 +89,19 @@
              */
             return (
                 <div>
-                    <section>
-                        <h2>Story Status</h2>
-                        <label>PLAN EST(H):</label>
-                        <input type="number" min="0" value={this.props.status.planEst}
-                               ref="plan"
-                               onChange={this.handleChange}/>&nbsp;&nbsp;
-                        <label>TASK EST(H):</label>
-                        {this.props.status.taskEst}&nbsp;&nbsp;
-                        <label>TODO (H):</label>
-                        {this.props.status.todo}&nbsp;&nbsp;
-                    </section>
+                    <Card expandable={true}>
+                        <CardText>
+                            <h3>Story Status</h3>
+                            <TextField value={this.props.status.planEst}
+                                       type="number" min="0"
+                                       floatingLabelText="PLAN EST(H)"
+                                       onChange={this.handleChange}/>
+                            <label>TASK EST(H):</label>
+                            {this.props.status.taskEst}&nbsp;&nbsp;
+                            <label>TODO (H):</label>
+                            {this.props.status.todo}
+                        </CardText>
+                    </Card>
                 </div>
             )
         }
@@ -136,62 +140,84 @@
                 qa: this.props.basic.qa
             });
         },
+        nameChange: function (e) {
+            var basic = this.props.basic;
+            basic.name = e.target.value;
+            this.props.basicChange(basic);
+        },
+        descChange: function (e) {
+            var basic = this.props.basic;
+            basic.desc = e.target.value;
+            this.props.basicChange(basic);
+        },
+        noteChange: function (e) {
+            var basic = this.props.basic;
+            basic.note = e.target.value;
+            this.props.basicChange(basic);
+        },
         pmChange: function (value) {
-            this.props.basicChange(this.getChangeData(value, 'pm'));
+            var basic = this.props.basic;
+            basic.pm = value;
+            this.props.basicChange(basic);
         },
         rdChange: function (value) {
-            this.props.basicChange(this.getChangeData(value, 'rd'));
+            var basic = this.props.basic;
+            basic.rd = value;
+            this.props.basicChange(basic);
         },
         feChange: function (value) {
-            this.props.basicChange(this.getChangeData(value, 'fe'));
+            var basic = this.props.basic;
+            basic.fe = value;
+            this.props.basicChange(basic);
         },
         qaChange: function (value) {
-            this.props.basicChange(this.getChangeData(value, 'qa'));
-        },
-        getChangeData: function (value, field) {
-            var data = {
-                name: this.refs.name.value,
-                desc: this.refs.desc.value,
-                note: this.refs.note.value,
-                pm: this.props.basic.pm || '',
-                rd: this.props.basic.rd || '',
-                fe: this.props.basic.fe || '',
-                qa: this.props.basic.qa || ''
-            };
-            data[field] = value;
-            return data;
+            var basic = this.props.basic;
+            basic.qa = value;
+            this.props.basicChange(basic);
         },
         render: function () {
-            var textStyle = {
-                width: '600px',
-                height: '100px'
+            var style = {
+                width: '600px'
             };
             return (
                 <div>
-                    <form>
-                        <labe>Story Name:</labe>
-                        <input className="name-input" ref="name" onChange={this.handleChange}
-                               value={this.props.basic.name}/>
-                        <Button onClick={this.click} bsStyle="primary" bsSize="small">
-                            {this.props.id ? 'Edit Story' : 'Create Story'}
-                        </Button>
-
-                        <h3>Description:</h3>
-                    <textarea row="10" ref="desc" onChange={this.handleChange}
-                              value={this.props.basic.desc} style={textStyle}></textarea>
-                        <h3>Notes:</h3>
-                    <textarea row="10" ref="note" onChange={this.handleChange}
-                              value={this.props.basic.note} style={textStyle}></textarea>
-                        <h3>Owners:</h3>
-                        <label>PM:</label>
-                        <MemberList value={this.props.basic.pm} onChange={this.pmChange}></MemberList>
-                        <label>RD:</label>
-                        <MemberList value={this.props.basic.rd} onChange={this.rdChange}></MemberList>
-                        <label>FE:</label>
-                        <MemberList value={this.props.basic.fe} onChange={this.feChange}></MemberList>
-                        <label>QA:</label>
-                        <MemberList value={this.props.basic.qa} onChange={this.qaChange}></MemberList>
-                    </form>
+                    <Card>
+                        <CardText>
+                            <TextField value={this.props.basic.name}
+                                       floatingLabelText="Story Name"
+                                       style={style}
+                                       onChange={this.nameChange}>
+                            </TextField>
+                            <FlatButton label={this.props.id ? 'Edit Story' : 'Create Story'}
+                                        onClick={this.click}
+                                        secondary={true}/><br/>
+                            <TextField row="10" onChange={this.descChange}
+                                       multiLine={true}
+                                       rows={4}
+                                       rowsMax={10}
+                                       floatingLabelText="Description"
+                                       style={style}
+                                       value={this.props.basic.desc}></TextField> <br/>
+                            <TextField onChange={this.noteChange}
+                                       multiLine={true}
+                                       rows={4}
+                                       rowsMax={10}
+                                       floatingLabelText="Notes"
+                                       style={style}
+                                       value={this.props.basic.note}></TextField>
+                        </CardText>
+                        <CardText>
+                            <h3>Owners:</h3>
+                            <label>PM:</label>
+                            <MemberList value={this.props.basic.pm} onChange={this.pmChange}></MemberList>
+                            <label>RD:</label>
+                            <MemberList value={this.props.basic.rd} onChange={this.rdChange}></MemberList>
+                            <label>FE:</label>
+                            <MemberList value={this.props.basic.fe} onChange={this.feChange}></MemberList>
+                            <label>QA:</label>
+                            <MemberList value={this.props.basic.qa} onChange={this.qaChange}></MemberList>
+                        </CardText>
+                    </Card>
                 </div>
             )
         }

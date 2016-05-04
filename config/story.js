@@ -9,11 +9,8 @@ require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
 //firebase
 require('./../node_modules/firebase/lib/firebase-web');
 
-//marked
-// require('./../node_modules/marked/marked.min.js');
-
 //material ui
-// require('./../node_modules/material-ui/lib/tabs');
+require('./../node_modules/material-ui');
 
 //app.js
 require('./../app/story/storyTask');
@@ -22,7 +19,6 @@ require('./../app/story/storyBug');
 require('./../app/story/storyInfo');
 require('./../app/story/story');
 require('./../app/story/dashboard');
-
 
 //common component
 require('./../app/common/customerList');

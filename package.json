@@ -23,11 +23,10 @@
   "homepage": "https://github.com/YouHan26/Rrally#readme",
   "dependencies": {
     "firebase": "^2.4.1",
-    "marked": "^0.3.5",
-    "react": "^15.0.1",
-    "react-bootstrap": "^0.29.0",
-    "react-dom": "^15.0.1",
-    "react-grid-layout": "^0.12.1"
+    "material-ui": "0.14.4",
+    "react": "^0.14.3",
+    "react-bootstrap": "^0.29.3",
+    "react-dom": "^0.14.3"
   },
   "devDependencies": {
     "eslint": "^2.7.0",

@@ -5,3 +5,9 @@
 .name-input {
     width: 400px;
 }
+
+html {
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
