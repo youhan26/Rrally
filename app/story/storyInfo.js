@@ -193,8 +193,7 @@
                                         secondary={true}/><br/>
                             <TextField row="10" onChange={this.descChange}
                                        multiLine={true}
-                                       rows={4}
-                                       rowsMax={10}
+                                       rows={6}
                                        floatingLabelText="Description"
                                        style={style}
                                        value={this.props.basic.desc}></TextField> <br/>
