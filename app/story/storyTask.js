@@ -8,6 +8,8 @@
     var FlatButton = MD.FlatButton;
     var CardText = MD.CardText;
     var Card = MD.Card;
+    var LIST = require('./../common/customerList');
+    var MemberSelect = LIST.MemberList;
 
     var Task = React.createClass({
         renderItem: function (item) {
@@ -49,6 +51,11 @@
             task.todo = parseFloat(e.target.value);
             this.props.onChange(task);
         },
+        ownerChange: function (value) {
+            var task = this.props.task;
+            task.owner = parseFloat(value);
+            this.props.onChange(task);
+        },
         render: function () {
             var style = {
                 width: '500px'
@@ -66,6 +73,8 @@
                             <TextField value={this.props.task.todo} onChange={this.todoChange}
                                        type="number"
                                        floatingLabelText="Task todo"/>
+                            <MemberSelect value={this.props.task.owner} onChange={this.ownerChange}
+                                          floatingLabelText="Owner"/>
                         </CardText>
                     </Card>
                 </div>

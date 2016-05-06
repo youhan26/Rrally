@@ -177,7 +177,8 @@ var Story = React.createClass({
             id: new Date().getTime().toString(),
             name: '',
             est: 0,
-            todo: 0
+            todo: 0,
+            owner: ''
         });
         this.setState({
             story: this.state.story
@@ -255,7 +256,7 @@ var Story = React.createClass({
         });
     },
     saveTask: function () {
-        this.firebaseRef.child(this.state.story.storyId).child('bug').update(this.state.story.bug,
+        this.firebaseRef.child(this.state.story.storyId).child('task').update(this.state.story.task,
             function (error) {
                 if (!error) {
                     alert('succ!');
@@ -263,7 +264,7 @@ var Story = React.createClass({
             });
     },
     saveBug: function () {
-        this.firebaseRef.child(this.state.story.storyId).child('task').update(this.state.story.task,
+        this.firebaseRef.child(this.state.story.storyId).child('bug').update(this.state.story.bug,
             function (error) {
                 if (!error) {
                     alert('succ!');

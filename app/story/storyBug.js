@@ -42,13 +42,6 @@
     });
 
     var BugItem = React.createClass({
-        // getDefaultProps: function () {
-        //     return {
-        //         name: '',
-        //         step: '',
-        //         status: 1
-        //     }
-        // },
         statusChange: function (value) {
             var bug = this.props.bug;
             bug.status = value;
