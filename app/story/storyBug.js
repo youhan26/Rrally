@@ -3,9 +3,12 @@
  */
 (function () {
     var React = require('react');
-    var BS = require('react-bootstrap');
-    var Button = BS.Button;
-    var BugSelect = require('./../common/bugSelect');
+    var MD = require('material-ui');
+    var TextField = MD.TextField;
+    var FlatButton = MD.FlatButton;
+    var CardText = MD.CardText;
+    var Card = MD.Card;
+    var BugSelect = require('./../common/customerList').BugList;
 
     var Bug = React.createClass({
         getDefaultProps: function () {
@@ -13,14 +16,9 @@
                 bug: []
             }
         },
-        componentWillUnmount: function () {
-            this.firebaseRef.off();
-        },
         renderItem: function (item) {
             return (
-                <BS.Well key={item.id}>
-                    <BugItem bug={item} onChange={this.onChange}></BugItem>
-                </BS.Well>
+                <BugItem bug={item} onChange={this.onChange} key={item.id}></BugItem>
             )
         },
         saveBug: function () {
@@ -36,60 +34,61 @@
             return (
                 <div>
                     {this.props.bug.map(this.renderItem)}
-                    <Button onClick={this.addBug}>Add Bug</Button>
-                    <Button onClick={this.saveBug}>Save Bug</Button>
+                    <FlatButton onClick={this.addBug}>Add Bug</FlatButton>
+                    <FlatButton onClick={this.saveBug} secondary={true}>Save Bug</FlatButton>
                 </div>
             )
         }
     });
 
     var BugItem = React.createClass({
-        getDefaultProps: function () {
-            return {
-                name: '',
-                step: '',
-                status: 1
-            }
-        },
+        // getDefaultProps: function () {
+        //     return {
+        //         name: '',
+        //         step: '',
+        //         status: 1
+        //     }
+        // },
         statusChange: function (value) {
-            this.props.onChange({
-                id: this.props.bug.id,
-                name: this.refs.name.value,
-                step: this.refs.step.value,
-                status: value,
-                updateTime: new Date().getTime()
-            });
+            var bug = this.props.bug;
+            bug.status = value;
+            this.props.onChange(bug);
         },
-        handleChange: function () {
-            this.props.onChange({
-                id: this.props.bug.id,
-                name: this.refs.name.value,
-                step: this.refs.step.value,
-                status: this.props.bug.status,
-                updateTime: new Date().getTime()
-            });
+        nameChange: function (e) {
+            var bug = this.props.bug;
+            bug.name = e.target.value;
+            this.props.onChange(bug);
         },
+        stepChange: function (e) {
+            var bug = this.props.bug;
+            bug.step = e.target.value;
+            this.props.onChange(bug);
+        },
+
         render: function () {
             var style = {
-                width: '250px',
-                height: '100px'
-            };
-            var divStyle = {
-                width: '33%',
-                display: 'inline'
+                width: '500px'
             };
             return (
                 <div>
-                    <label>Bug Name: </label>
-                    <input value={this.props.bug.name} onChange={this.handleChange} ref="name"/>
-                    <br/>
-                    <div style={divStyle}>
-                        <label>Step:</label>
-                        <textarea value={this.props.bug.step} onChange={this.handleChange} ref="step" style={style}/>
-                    </div>
-                    <label>Bug Status:</label>
-                    <BugSelect value={this.props.bug.status} onChange={this.statusChange}>
-                    </BugSelect>
+                    <Card>
+                        <CardText>
+                            <TextField value={this.props.bug.name} onChange={this.nameChange}
+                                       floatingLabelText="Bug Name"/>
+                            <br/>
+                            <TextField onChange={this.stepChange}
+                                       multiLine={true}
+                                       rows={4}
+                                       floatingLabelText="Step"
+                                       style={style}
+                                       value={this.props.bug.step}></TextField>
+                            <br/>
+                            <BugSelect value={this.props.bug.status} onChange={this.statusChange}
+                                       floatingLabelText="Bug Status">
+                            </BugSelect>
+                        </CardText>
+                    </Card>
+
                 </div>
             )
         }

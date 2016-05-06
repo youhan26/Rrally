@@ -24,4 +24,3 @@ require('./../app/story/dashboard');
 //common component
 require('./../app/common/customerList');
 require('./../app/common/config');
-require('./../app/common/bugSelect');

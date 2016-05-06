@@ -96,10 +96,24 @@
         }
     });
 
+    var BugList = React.createClass({
+        onChange: function (data) {
+            this.props.onChange(data);
+        },
+        render: function () {
+            this.props.value = parseInt(this.props.value);
+            return (
+                <BasicList dataList="bug" value={parseInt(this.props.value)} onChange={this.onChange}
+                           floatingLabelText={this.props.floatingLabelText}></BasicList>
+            )
+        }
+    });
+
     module.exports = {
         ProjectList: ProjectList,
         ReleaseSelect: ReleaseSelect,
         MemberList: MemberList,
-        BasicList: BasicList
+        BasicList: BasicList,
+        BugList: BugList
     };
 })();
