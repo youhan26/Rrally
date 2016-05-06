@@ -281,8 +281,9 @@ var Story = React.createClass({
     },
     render: function () {
         var style = {
-            'textAlign': 'center'
+            'marginLeft': '45px'
         };
+
         return (
             <div>
                 <h2 style={style}>{this.state.story.storyId}</h2>
