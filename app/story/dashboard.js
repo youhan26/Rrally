@@ -12,6 +12,19 @@ var LIST = require('./../common/customerList');
 var ProjectList = LIST.ProjectList;
 var ReleaseSelect = LIST.ReleaseSelect;
 
+var ReactGridLayout = require('react-grid-layout');
+
+var MyFirstGrid = React.createClass({
+    render: function () {
+        return (
+            <ReactGridLayout className="layout" cols={12} rowHeight={30} width={window.innerWidth}>
+                <div className="dashboard" key="a" _grid={{x: 0, y: 0, w: 10, h: 20, minW : 10, maxW : 12}}>
+                    <StoryList></StoryList>
+                </div>
+            </ReactGridLayout>
+        )
+    }
+});
 var StoryList = React.createClass({
     getInitialState: function () {
         this.curRelease = '';
@@ -183,5 +196,5 @@ var StoryItem = React.createClass({
 var el = document.getElementById('storyList');
 
 if (el) {
-    ReactDOM.render(React.createElement(StoryList, null), el);
+    ReactDOM.render(React.createElement(MyFirstGrid, null), el);
 }

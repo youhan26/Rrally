@@ -13,6 +13,9 @@ require('./../node_modules/firebase/lib/firebase-web');
 require('./../node_modules/material-ui');
 require("./../node_modules/react-tap-event-plugin");
 
+//react grid layout
+require('./../node_modules/react-grid-layout');
+
 //app.js
 require('./../app/story/storyTask');
 require('./../app/story/storyCase');

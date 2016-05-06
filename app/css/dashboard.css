@@ -27,3 +27,9 @@
 .fixed-bug {
     color: green;
 }
+
+.dashboard {
+    background-color: floralwhite;
+    padding: 10px 15px;
+    box-shadow: 5px 5px 5px #444;
+}
