@@ -18,27 +18,19 @@
      */
     var StorySchedule = React.createClass({
         iterationChange: function (e) {
-            this.props.scheduleChange(
-                ref.project.value,
-                e.target.value,
-                this.props.schedule.release
-            );
+            var schedule = this.props.schedule;
+            schedule.iteration = e.target.value;
+            this.props.scheduleChange(schedule);
         },
         projectChange: function (value) {
-            var ref = this.refs;
-            this.props.scheduleChange(
-                value,
-                ref.iteration.value,
-                this.props.schedule.release
-            );
+            var schedule = this.props.schedule;
+            schedule.project = value;
+            this.props.scheduleChange(schedule);
         },
         releaseChange: function (value) {
-            var ref = this.refs;
-            this.props.scheduleChange(
-                this.props.schedule.project,
-                ref.iteration.value,
-                value
-            );
+            var schedule = this.props.schedule;
+            schedule.release = value;
+            this.props.scheduleChange(schedule);
         },
         render: function () {
             return (
@@ -46,14 +38,18 @@
                     <Card>
                         <CardText>
                             <h3>Story Schedule</h3>
-                            <label>Project Name: </label>
                             <ProjectList onChange={this.projectChange}
-                                         value={this.props.schedule.project}></ProjectList>
+                                         floatingLabelText={'Project Name'}
+                                         value={this.props.schedule.project}>
+                            </ProjectList>
+                            <br/>
                             <TextField value={this.props.schedule.iteration}
                                        floatingLabelText="Iteration"
                                        onChange={this.iterationChange}/>
-                            <label>Release : </label>
-                            <ReleaseSelect value={this.props.schedule.release} onChange={this.releaseChange}>
+                            <br/>
+                            <ReleaseSelect value={this.props.schedule.release}
+                                           floatingLabelText={'Release'}
+                                           onChange={this.releaseChange}>
                             </ReleaseSelect>
                         </CardText>
                     </Card>
@@ -96,10 +92,14 @@
                                        type="number" min="0"
                                        floatingLabelText="PLAN EST(H)"
                                        onChange={this.handleChange}/>
-                            <label>TASK EST(H):</label>
-                            {this.props.status.taskEst}&nbsp;&nbsp;
-                            <label>TODO (H):</label>
-                            {this.props.status.todo}
+                            <TextField value={this.props.status.taskEst}
+                                       type="number" min="0"
+                                       floatingLabelText="TASK EST(H)"
+                                       disabled={true}/>
+                            <TextField value={this.props.status.todo}
+                                       type="number" min="0"
+                                       floatingLabelText="TODO(H)"
+                                       disabled={true}/>
                         </CardText>
                     </Card>
                 </div>
@@ -207,14 +207,14 @@
                         </CardText>
                         <CardText>
                             <h3>Owners:</h3>
-                            <label>PM:</label>
-                            <MemberList value={this.props.basic.pm} onChange={this.pmChange}></MemberList>
-                            <label>RD:</label>
-                            <MemberList value={this.props.basic.rd} onChange={this.rdChange}></MemberList>
-                            <label>FE:</label>
-                            <MemberList value={this.props.basic.fe} onChange={this.feChange}></MemberList>
-                            <label>QA:</label>
-                            <MemberList value={this.props.basic.qa} onChange={this.qaChange}></MemberList>
+                            <MemberList value={this.props.basic.pm} onChange={this.pmChange}
+                                        floatingLabelText={'PM'}></MemberList>
+                            <MemberList value={this.props.basic.rd} onChange={this.rdChange}
+                                        floatingLabelText={'RD'}></MemberList>
+                            <MemberList value={this.props.basic.fe} onChange={this.feChange}
+                                        floatingLabelText={'FE'}></MemberList>
+                            <MemberList value={this.props.basic.qa} onChange={this.qaChange}
+                                        floatingLabelText={'QA'}></MemberList>
                         </CardText>
                     </Card>
                 </div>

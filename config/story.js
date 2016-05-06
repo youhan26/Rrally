@@ -11,6 +11,7 @@ require('./../node_modules/firebase/lib/firebase-web');
 
 //material ui
 require('./../node_modules/material-ui');
+require("./../node_modules/react-tap-event-plugin");
 
 //app.js
 require('./../app/story/storyTask');

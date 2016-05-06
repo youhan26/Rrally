@@ -7,11 +7,17 @@
     var React = require('react');
     var Firebase = require('firebase');
     var constant = require('./config');
+    var injectTapEventPlugin = require("react-tap-event-plugin");
+    var MD = require('material-ui');
+    var SelectField = MD.SelectField;
+    var MenuItem = MD.MenuItem;
+
+    injectTapEventPlugin();
 
     var BasicList = React.createClass({
-        onChange: function () {
+        onChange: function (e, index, value) {
             if (this.props.onChange) {
-                this.props.onChange(this.refs.release.value);
+                this.props.onChange(value);
             }
         },
         getInitialState: function () {
@@ -19,7 +25,6 @@
                 items: []
             }
         },
-
         componentWillMount: function () {
             var dataList = this.props.dataList;
             this.firebaseRef = new Firebase(constant.host + '/' + dataList);
@@ -41,23 +46,27 @@
         },
         render: function () {
             function renderItem(item) {
-                return <option key={item.id} value={item.id}>{item.name}</option>;
+                return <MenuItem key={item.id} value={item.id} primaryText={item.name}/>;
             }
 
             return (
-                <select value={this.props.value} onChange={this.onChange} ref="release">
+                <SelectField value={this.props.value} onChange={this.onChange}
+                             floatingLabelText={this.props.floatingLabelText}>
                     {this.state.items.map(renderItem)}
-                </select>
+                </SelectField>
             )
         }
     });
+
     var ProjectList = React.createClass({
         onChange: function (data) {
             this.props.onChange(data);
         },
         render: function () {
+            this.props.value = parseInt(this.props.value);
             return (
-                <BasicList dataList="project" value={this.props.value} onChange={this.onChange}></BasicList>
+                <BasicList dataList="project" value={parseInt(this.props.value)} onChange={this.onChange}
+                           floatingLabelText={this.props.floatingLabelText}></BasicList>
             )
         }
     });
@@ -68,7 +77,8 @@
         },
         render: function () {
             return (
-                <BasicList dataList="release" value={this.props.value} onChange={this.onChange}></BasicList>
+                <BasicList dataList="release" value={parseInt(this.props.value)} onChange={this.onChange}
+                           floatingLabelText={this.props.floatingLabelText}></BasicList>
             )
         }
     });
@@ -78,8 +88,10 @@
             this.props.onChange(data);
         },
         render: function () {
+            this.props.value = parseInt(this.props.value);
             return (
-                <BasicList dataList="member" value={this.props.value} onChange={this.onChange}></BasicList>
+                <BasicList dataList="member" value={parseInt(this.props.value)} onChange={this.onChange}
+                           floatingLabelText={this.props.floatingLabelText}></BasicList>
             )
         }
     });
@@ -87,6 +99,7 @@
     module.exports = {
         ProjectList: ProjectList,
         ReleaseSelect: ReleaseSelect,
-        MemberList: MemberList
+        MemberList: MemberList,
+        BasicList: BasicList
     };
 })();

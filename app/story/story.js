@@ -84,12 +84,8 @@ var Story = React.createClass({
             story: this.state.story
         });
     },
-    scheduleChange: function (project, iteration, release) {
-        this.state.story.schedule = {
-            project: project,
-            iteration: iteration,
-            release: release
-        };
+    scheduleChange: function (schedule) {
+        this.state.story.schedule = schedule;
         this.setState({
             story: this.state.story
         });
