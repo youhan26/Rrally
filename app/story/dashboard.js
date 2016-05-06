@@ -10,6 +10,7 @@ var Button = bs.Button;
 var constant = require('./../common/config');
 var LIST = require('./../common/customerList');
 var ProjectList = LIST.ProjectList;
+var ReleaseSelect = LIST.ReleaseSelect;
 
 var StoryList = React.createClass({
     getInitialState: function () {
@@ -18,17 +19,6 @@ var StoryList = React.createClass({
         return {
             items: [[], [], [], [], [], []]
         }
-    },
-    updateList: function (list, data) {
-        if (list) {
-            for (var i in list) {
-                if (list[i].id == data.id) {
-                    list.splice(i, 1);
-                    break;
-                }
-            }
-        }
-
     },
     loadData: function () {
         this.firebaseRef.once('value', function (snap) {
@@ -101,16 +91,19 @@ var StoryList = React.createClass({
         this.curProject = value;
         this.loadData();
     },
+    releaseChange: function (value) {
+        this.curRelease = value;
+        this.loadData();
+    },
     render: function () {
         return (
             <div>
                 <div>
                     <h4>
-                        <label>Current Release: </label>
-                        {this.curReleaseName}
-                        &nbsp;&nbsp;
-                        <label>Select Project:</label>
-                        <ProjectList value={this.curProject} onChange={this.projectChange}></ProjectList>
+                        <ProjectList value={this.curProject} onChange={this.projectChange}
+                                     floatingLabelText="Project"/>
+                        <ReleaseSelect value={this.curRelease} onChange={this.releaseChange}
+                                       floatingLabelText="Release"/>
                     </h4>
                 </div>
                 <div className="state-div">
