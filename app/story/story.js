@@ -5,9 +5,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
-var BS = require('react-bootstrap');
-var Tab = BS.Tab;
-var Tabs = BS.Tabs;
 var constant = require('./../common/config');
 var Task = require('./storyTask');
 var Case = require('./storyCase');
@@ -16,6 +13,9 @@ var storyInfo = require('./storyInfo');
 var StoryBasic = storyInfo.basic;
 var StorySchedule = storyInfo.schedule;
 var StoryStatus = storyInfo.status;
+var MD = require('material-ui');
+var Tab = MD.Tab;
+var Tabs = MD.Tabs;
 
 /**
  * attachments will support the upload all kinds of file function.
@@ -254,19 +254,39 @@ var Story = React.createClass({
             story: this.state.story
         });
     },
+    saveTask: function () {
+        this.firebaseRef.child(this.state.story.storyId).child('bug').update(this.state.story.bug,
+            function (error) {
+                if (!error) {
+                    alert('succ!');
+                }
+            });
+    },
     saveBug: function () {
-        this.firebaseRef.child(this.state.story.storyId).child('bug').update(this.state.story.bug, function (error) {
-            if (!error) {
-                alert('succ!');
-            }
-        });
+        this.firebaseRef.child(this.state.story.storyId).child('task').update(this.state.story.task,
+            function (error) {
+                if (!error) {
+                    alert('succ!');
+                }
+            });
+    },
+    saveCase: function () {
+        this.firebaseRef.child(this.state.story.storyId).child('case').update(this.state.story.case,
+            function (error) {
+                if (!error) {
+                    alert('succ!');
+                }
+            });
     },
     render: function () {
+        var style = {
+            'textAlign': 'center'
+        };
         return (
             <div>
-                <h2>{this.state.story.storyId}</h2>
-                <Tabs defaultActiveKey={1} animation={false} id="storyDetailTabs">
-                    <Tab eventKey={1} title="Story ">
+                <h2 style={style}>{this.state.story.storyId}</h2>
+                <Tabs>
+                    <Tab label="Story">
                         <StoryBasic onCreate={this.create} basicChange={this.basicChange}
                                     basic={this.state.story.basic} id={this.state.story.id}>
                         </StoryBasic>
@@ -277,16 +297,16 @@ var Story = React.createClass({
                         <StoryStatus statusChange={this.statusChange} status={this.state.story.status}>
                         </StoryStatus>
                     </Tab>
-                    <Tab eventKey={2} title="Task">
-                        <Task saveAll={this.create} task={this.state.story.task} onAdd={this.addTask}
+                    <Tab label="Task">
+                        <Task saveAll={this.saveTask} task={this.state.story.task} onAdd={this.addTask}
                               onChange={this.taskChange}></Task>
                     </Tab>
-                    <Tab eventKey={3} title="Test Case">
-                        <Case saveAll={this.create} case={this.state.story.case} onAdd={this.addCase}
+                    <Tab label="Test Case">
+                        <Case saveAll={this.saveCase} case={this.state.story.case} onAdd={this.addCase}
                               onChange={this.caseChange}>
                         </Case>
                     </Tab>
-                    <Tab eventKey={4} title="Bug">
+                    <Tab label="Bug">
                         <Bug saveAll={this.saveBug} bug={this.state.story.bug} onAdd={this.addBug}
                              onChange={this.bugChange}>
                         </Bug>

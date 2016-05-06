@@ -3,13 +3,15 @@
  */
 (function () {
     var React = require('react');
-    var BS = require('react-bootstrap');
+    var MD = require('material-ui');
+    var TextField = MD.TextField;
+    var FlatButton = MD.FlatButton;
+    var CardText = MD.CardText;
+    var Card = MD.Card;
 
     var Task = React.createClass({
         renderItem: function (item) {
-            return <BS.Well key={item.id}>
-                <TaskItem task={item} onChange={this.onChange}></TaskItem>
-            </BS.Well>
+            return <TaskItem task={item} key={item.id} onChange={this.onChange}></TaskItem>;
         },
         saveTask: function (task) {
             this.props.saveAll(task);
@@ -24,37 +26,48 @@
             return (
                 <div>
                     {this.props.task.map(this.renderItem)}
-                    <BS.Button onClick={this.addTask}>Add Task</BS.Button>
-                    <BS.Button onClick={this.saveTask}>Save Task</BS.Button>
+                    <FlatButton onClick={this.addTask}>Add Task</FlatButton>
+                    <FlatButton onClick={this.saveTask} secondary={true}>Save Task</FlatButton>
                 </div>
             )
         }
     });
 
     var TaskItem = React.createClass({
-        handleChange: function () {
-            this.props.onChange({
-                id: this.props.task.id,
-                name: this.refs.name.value,
-                est: parseFloat(this.refs.est.value),
-                todo: parseFloat(this.refs.todo.value),
-                updateTime: new Date().getTime()
-            });
+        nameChange: function (e) {
+            var task = this.props.task;
+            task.name = e.target.value;
+            this.props.onChange(task);
+        },
+        estChange: function (e) {
+            var task = this.props.task;
+            task.est = parseFloat(e.target.value);
+            this.props.onChange(task);
+        },
+        todoChange: function (e) {
+            var task = this.props.task;
+            task.todo = parseFloat(e.target.value);
+            this.props.onChange(task);
         },
         render: function () {
             var style = {
-                width: '400px'
+                width: '500px'
             };
             return (
                 <div>
-                    <label>Task Name:</label>
-                    <input value={this.props.task.name} onChange={this.handleChange} ref="name" style={style}/>
-                    &nbsp;&nbsp;
-                    <label>Task Est:</label>
-                    <input value={this.props.task.est} onChange={this.handleChange} ref="est" type="number"/>
-                    &nbsp;&nbsp;
-                    <label>Task todo:</label>
-                    <input value={this.props.task.todo} onChange={this.handleChange} ref="todo" type="number"/>
+                    <Card>
+                        <CardText>
+                            <TextField value={this.props.task.name} onChange={this.nameChange}
+                                       floatingLabelText="Task Name"
+                                       style={style}/>
+                            <TextField value={this.props.task.est} onChange={this.estChange}
+                                       type="number"
+                                       floatingLabelText="Task Est"/>
+                            <TextField value={this.props.task.todo} onChange={this.todoChange}
+                                       type="number"
+                                       floatingLabelText="Task todo"/>
+                        </CardText>
+                    </Card>
                 </div>
             )
         }
