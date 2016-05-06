@@ -13,6 +13,8 @@
     var CardText = MD.CardText;
     var FlatButton = MD.FlatButton;
 
+    var constant = require('./../common/constant');
+
     /**
      * story schedule include release version, iteration and so on
      */
@@ -36,7 +38,7 @@
             return (
                 <div>
                     <Card>
-                        <CardText>
+                        <CardText style={constant.cardStyle}>
                             <h3>Story Schedule</h3>
                             <ProjectList onChange={this.projectChange}
                                          floatingLabelText={'Project Name'}
@@ -85,8 +87,8 @@
              */
             return (
                 <div>
-                    <Card expandable={true}>
-                        <CardText>
+                    <Card >
+                        <CardText style={constant.cardStyle}>
                             <h3>Story Status</h3>
                             <TextField value={this.props.status.planEst}
                                        type="number" min="0"
@@ -125,17 +127,6 @@
         click: function () {
             this.props.onCreate();
         },
-        // handleChange: function () {
-        //     this.props.basicChange({
-        //         name: this.refs.name.value,
-        //         desc: this.refs.desc.value,
-        //         note: this.refs.note.value,
-        //         pm: this.props.basic.pm,
-        //         rd: this.props.basic.rd,
-        //         fe: this.props.basic.fe,
-        //         qa: this.props.basic.qa
-        //     });
-        // },
         nameChange: function (e) {
             var basic = this.props.basic;
             basic.name = e.target.value;
@@ -177,8 +168,8 @@
             };
             return (
                 <div>
-                    <Card>
-                        <CardText>
+                    <Card >
+                        <CardText style={constant.cardStyle}>
                             <TextField value={this.props.basic.name}
                                        floatingLabelText="Story Name"
                                        style={style}
@@ -201,7 +192,7 @@
                                        style={style}
                                        value={this.props.basic.note}></TextField>
                         </CardText>
-                        <CardText>
+                        <CardText style={constant.cardStyle}>
                             <h3>Owners:</h3>
                             <MemberList value={this.props.basic.pm} onChange={this.pmChange}
                                         floatingLabelText={'PM'}></MemberList>

@@ -23,8 +23,10 @@
         }, {
             name: '上线',
             value: 6
-        }]
-
+        }],
+        cardStyle: {
+            'marginLeft': '30px'
+        }
     };
     module.exports = constant;
 })();
