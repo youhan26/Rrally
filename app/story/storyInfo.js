@@ -123,23 +123,19 @@
             };
         },
         click: function () {
-            this.props.onCreate({
-                name: this.refs.name.value,
-                desc: this.refs.desc.value,
-                note: this.refs.note.value
-            });
+            this.props.onCreate();
         },
-        handleChange: function () {
-            this.props.basicChange({
-                name: this.refs.name.value,
-                desc: this.refs.desc.value,
-                note: this.refs.note.value,
-                pm: this.props.basic.pm,
-                rd: this.props.basic.rd,
-                fe: this.props.basic.fe,
-                qa: this.props.basic.qa
-            });
-        },
+        // handleChange: function () {
+        //     this.props.basicChange({
+        //         name: this.refs.name.value,
+        //         desc: this.refs.desc.value,
+        //         note: this.refs.note.value,
+        //         pm: this.props.basic.pm,
+        //         rd: this.props.basic.rd,
+        //         fe: this.props.basic.fe,
+        //         qa: this.props.basic.qa
+        //     });
+        // },
         nameChange: function (e) {
             var basic = this.props.basic;
             basic.name = e.target.value;
