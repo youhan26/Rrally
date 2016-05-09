@@ -133,7 +133,7 @@ var StoryList = React.createClass({
                     <a href={'../story/story.html?id=' + item.storyId} target="_blank">
                         {item.storyId}
                     </a>
-                </TableRowColumn>
+                </TableRowColumn>w
                 <TableRowColumn style={this.style}>{item.basic.name}</TableRowColumn>
                 <TableRowColumn style={this.style2}>{item.status.planEst}</TableRowColumn>
                 <TableRowColumn>

@@ -26,6 +26,7 @@ require('./../app/story/storyBug');
 require('./../app/story/storyInfo');
 require('./../app/story/story');
 require('./../app/story/dashboard');
+require('./../app/story/effort');
 
 //common component
 require('./../app/common/customerList');
