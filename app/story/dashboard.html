@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>R-rally</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <link href="./../css/react-grid-layout.css" rel="stylesheet">
     <link href="./../css/react-resizable.css" rel="stylesheet">
+    <link href="./../css/basic.css" rel="stylesheet">
     <link href="./../css/dashboard.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 </head>
 <body>
 <span style="font-size: 2em;">DashBoard</span>
-<button class="btn btn-default">
-    <a href="story.html" target="_blank"> New Story</a>
-</button>
-<button class="btn btn-primary" style="float: right">
-    <a href="./../backlog/backlog.html" target="_blank" style="color: white"> Backlog Page</a>
-</button>
-
+<div style="float: right">
+    <a href="story.html" target="_blank">
+        <button class="btn btn-default">New Story</button>
+    </a>
+    <a href="./../backlog/backlog.html">
+        <button class="btn btn-primary">Backlog Page</button>
+    </a>
+</div>
 <div id="storyList"></div>
 
 

@@ -14,3 +14,7 @@ html {
 html, textarea, button, label, h1, h2, h3, h4, span, input, div, td, th {
     font-family: 'Microsoft YaHei' ! important;
 }
+
+a:link, a:visited, a:hover, a:focus {
+    text-decoration: none; /*超链接无下划线*/
+}
