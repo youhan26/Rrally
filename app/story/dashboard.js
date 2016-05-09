@@ -165,6 +165,7 @@ var StoryList = React.createClass({
     render: function () {
         return (
             <div>
+                <Effort items={this.state.effortList}></Effort>
                 <div>
                     <div>
                         <h4>
@@ -199,7 +200,6 @@ var StoryList = React.createClass({
                         {this.state.items[5].map(this.renderLi)}
                     </div>
                 </div>
-                <Effort items={this.state.effortList}></Effort>
             </div>
         )
     }
