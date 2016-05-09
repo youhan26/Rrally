@@ -68,12 +68,8 @@ var Story = React.createClass({
             }
         }
     },
-    statusChange: function (plan, task, todo) {
-        this.state.story.status = {
-            planEst: parseFloat(plan),
-            taskEst: parseFloat(task),
-            todo: parseFloat(todo)
-        };
+    statusChange: function (value) {
+        this.state.story.status = value;
         this.setState({
             story: this.state.story
         });

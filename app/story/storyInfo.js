@@ -12,6 +12,7 @@
     var Card = MD.Card;
     var CardText = MD.CardText;
     var FlatButton = MD.FlatButton;
+    var DatePicker = MD.DatePicker;
 
     var constant = require('./../common/constant');
 
@@ -74,11 +75,16 @@
             }
         },
         handleChange: function (e) {
-            this.props.statusChange(
-                e.target.value,
-                this.props.status.taskEst,
-                this.props.status.todo
-            );
+            var status = this.props.status;
+            status.planEst = e.target.value;
+            this.props.statusChange(status);
+        },
+        dateChange: function (oldValue, value) {
+            var status = this.props.status;
+            if (value) {
+                status.testDate = value.getTime();
+                this.props.statusChange(status);
+            }
         },
         render: function () {
             /**
@@ -102,6 +108,11 @@
                                        type="number" min="0"
                                        floatingLabelText="TODO(H)"
                                        disabled={true}/>
+                            <DatePicker
+                                floatingLabelText="预计交付时间"
+                                value={this.props.status.testDate ? new Date(this.props.status.testDate) : null}
+                                onChange={this.dateChange}
+                            />
                         </CardText>
                     </Card>
                 </div>
