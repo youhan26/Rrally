@@ -69,10 +69,10 @@
                                        style={style}/>
                             <TextField value={this.props.task.est} onChange={this.estChange}
                                        type="number"
-                                       floatingLabelText="Task Est"/>
+                                       floatingLabelText="Task Est(Point)"/>
                             <TextField value={this.props.task.todo} onChange={this.todoChange}
                                        type="number"
-                                       floatingLabelText="Task todo"/>
+                                       floatingLabelText="Task todo(Point)"/>
                             <MemberSelect value={this.props.task.owner} onChange={this.ownerChange}
                                           floatingLabelText="Owner"/>
                         </CardText>

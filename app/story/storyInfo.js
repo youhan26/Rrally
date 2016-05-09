@@ -98,15 +98,15 @@
                             <h3>Story Status</h3>
                             <TextField value={this.props.status.planEst}
                                        type="number" min="0"
-                                       floatingLabelText="PLAN EST(H)"
+                                       floatingLabelText="PLAN EST(Point)"
                                        onChange={this.handleChange}/>
                             <TextField value={this.props.status.taskEst}
                                        type="number" min="0"
-                                       floatingLabelText="TASK EST(H)"
+                                       floatingLabelText="TASK EST(Point)"
                                        disabled={true}/>
                             <TextField value={this.props.status.todo}
                                        type="number" min="0"
-                                       floatingLabelText="TODO(H)"
+                                       floatingLabelText="TODO(Point)"
                                        disabled={true}/>
                             <DatePicker
                                 floatingLabelText="预计交付时间"
