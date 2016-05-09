@@ -16,6 +16,9 @@ require("./../node_modules/react-tap-event-plugin");
 //react grid layout
 require('./../node_modules/react-grid-layout');
 
+//utils
+require('./../app/utils/dateFormat');
+
 //app.js
 require('./../app/story/storyTask');
 require('./../app/story/storyCase');

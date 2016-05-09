@@ -184,6 +184,7 @@ var StoryItem = React.createClass({
                     <label>Task Est:</label> {this.props.story.status.taskEst}<br/>
                     <label>Todo:</label> {this.props.story.status.todo}<br/>
                     <label>Bugs: {this.props.story.bug.length}</label><br/>
+                    <label>测试时间: {this.props.story.status.testDate != (undefined || null) ? new Date(this.props.story.status.testDate).Format('yyyy/MM/dd') : '无'}</label><br/>
                     {this.props.story.bug.map(this.renderBugItem)}
                     <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
                     <Button bsStyle="primary" style={style} onClick={this.clickRight}>&gt;</Button>
@@ -196,5 +197,5 @@ var StoryItem = React.createClass({
 var el = document.getElementById('storyList');
 
 if (el) {
-    ReactDOM.render(React.createElement(MyFirstGrid, null), el);
+    ReactDOM.render(React.createElement(StoryList, null), el);
 }
