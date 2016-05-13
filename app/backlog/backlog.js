@@ -6,6 +6,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
 var constant = require('./../common/config');
+var List = require('./../common/customerList');
+var Project = List.ProjectList;
 
 var MD = require('material-ui');
 var Table = MD.Table;
@@ -33,6 +35,7 @@ var StoryList = React.createClass({
         this.style2 = {
             width: '15%'
         };
+        this.curProject = 999;
         this.loadProjectData(true);
     },
     loadProjectData: function (loadData) {
@@ -66,7 +69,9 @@ var StoryList = React.createClass({
             var data = snap.val();
             var items = [];
             for (var i in data) {
-                if (data[i].schedule.release == '') {
+                if (data[i].schedule.release == ''
+                    && (this.curProject === 999 ||
+                    (data[i].schedule.project.toString() == this.curProject.toString()))) {
                     items.push(data[i]);
                 }
             }
@@ -144,9 +149,15 @@ var StoryList = React.createClass({
             </TableRow>
         );
     },
+    projectChange: function (value) {
+        this.curProject = value;
+        this.loadData();
+    },
     render: function () {
         return (
             <div>
+                <Project value={this.curProject} onChange={this.projectChange}
+                         floatingLabelText={'Select Project'}></Project>
                 <Table>
                     <TableHeader displaySelectAll={false}>
                         <TableRow>
