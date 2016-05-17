@@ -1,0 +1,89 @@
+{
+  "bug" : [ {
+    "id" : 1,
+    "name" : "Open(激活)"
+  }, {
+    "id" : 2,
+    "name" : "Fixed（本地修复）"
+  }, {
+    "id" : 3,
+    "name" : "Close(关闭)"
+  } ],
+  "index" : {
+    "caseIndex" : 1,
+    "releaseIndex" : 8,
+    "storyIndex" : 1,
+    "taskIndex" : 1
+  },
+  "member" : [ {
+    "id" : "",
+    "name" : ""
+  }, {
+    "id" : 1,
+    "name" : "A"
+  }, {
+    "id" : 14,
+    "name" : "B"
+  }, {
+    "id" : 3,
+    "name" : "C"
+  }, {
+    "id" : 4,
+    "name" : "小明"
+  }, {
+    "id" : 5,
+    "name" : "李磊"
+  }, {
+    "id" : 6,
+    "name" : "小红"
+  } ],
+  "project" : [ {
+    "id" : 999,
+    "name" : "全部"
+  }, {
+    "id" : 1,
+    "name" : "项目A"
+  }, {
+    "id" : 14,
+    "name" : "项目B"
+  }, {
+    "id" : 3,
+    "name" : "项目C"
+  }, {
+    "id" : 6,
+    "name" : "项目D"
+  }, {
+    "id" : 4,
+    "name" : "项目E"
+  }, {
+    "id" : 5,
+    "name" : "项目F"
+  } ],
+  "release" : [ {
+    "id" : "",
+    "name" : ""
+  }, {
+    "id" : 1461640410374,
+    "name" : "Release 1"
+  }, {
+    "id" : 1461640421315,
+    "name" : "Release 2"
+  }, {
+    "id" : 1461810841204,
+    "name" : "Release 3"
+  }, {
+    "id" : 1461894160397,
+    "name" : "Release 4"
+  }, {
+    "id" : 1462241323067,
+    "name" : "Release 5"
+  }, {
+    "id" : 1462531541453,
+    "name" : "Release 6"
+  }, {
+    "id" : 1463363970250,
+    "name" : "Release 7"
+  } ],
+  "story" : {
+  }
+}

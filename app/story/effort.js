@@ -24,7 +24,6 @@ var Effort = React.createClass({
     },
     render: function () {
         var style = {
-            'height': '400px'
         };
         return (
             <div style={style}>
