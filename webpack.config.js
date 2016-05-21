@@ -4,7 +4,8 @@ module.exports = {
         story: './config/story.js',
         utils: './config/utils.js',
         backlog: './config/backlog.js',
-        storyList: './config/storyList.js'
+        storyList: './config/storyList.js',
+        manage: './config/manage.js'
     },
     output: {
         path: __dirname + '/bundle',
