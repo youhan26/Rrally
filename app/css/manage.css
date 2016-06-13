@@ -1,0 +1,15 @@
+.projectCard {
+    margin-top: 10px;
+}
+
+.memberCard {
+    margin-top: 10px;
+}
+
+.manage-project-list-card {
+
+}
+
+.manage-project-list-card > div > button {
+    float: right
+}

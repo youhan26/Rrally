@@ -5,28 +5,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
-var bs = require('react-bootstrap');
-var Button = bs.Button;
 var constant = require('./../common/config');
 var LIST = require('./../common/customerList');
 var ProjectList = LIST.ProjectList;
 var ReleaseSelect = LIST.ReleaseSelect;
 var Effort = require('./effort');
-
-var ReactGridLayout = require('react-grid-layout');
-
-// var MyFirstGrid = React.createClass({
-//     render: function () {
-//         return (
-//             <ReactGridLayout className="layout" cols={12} rowHeight={30} width={window.innerWidth}>
-//                 <div className="dashboard" key="a" _grid={{x: 0, y: 0, w: 10, h: 20, minW : 10, maxW : 12}}>
-//                     <StoryList></StoryList>
-//                 </div>
-//             </ReactGridLayout>
-//         )
-//     }
-// });
-
 
 var StoryList = React.createClass({
     getInitialState: function () {
@@ -243,8 +226,8 @@ var StoryItem = React.createClass({
                     <label>Bugs: {this.props.story.bug.length}</label><br/>
                     <label>测试时间: {this.props.story.status.testDate != (undefined || null) ? new Date(this.props.story.status.testDate).Format('yyyy/MM/dd') : '无'}</label><br/>
                     {this.props.story.bug.map(this.renderBugItem)}
-                    <Button bsStyle="primary" onClick={this.clickLeft}>&lt;</Button>
-                    <Button bsStyle="primary" style={style} onClick={this.clickRight}>&gt;</Button>
+                    <button bsStyle="primary" onClick={this.clickLeft}>&lt;</button>
+                    <button bsStyle="primary" style={style} onClick={this.clickRight}>&gt;</button>
                 </section>
             </div>
         )

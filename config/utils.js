@@ -4,18 +4,10 @@
 // react
 'use strict';
 require('./../node_modules/react/react');
-require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
-
-//firebase
 require('./../node_modules/firebase/lib/firebase-web');
-// require('./../node_modules/reactfire/dist/reactfire.min.js');
+require('./../app/common/api');
 
-//marked
-// require('./../node_modules/marked/marked.min.js');
 
-//app.js
-// require('./app/js/app');
-// require('./app/js/todoList');
 require('./../app/utils/addChild');
 require('./../app/utils/addRelease');
 require('./../app/utils/bugChange');

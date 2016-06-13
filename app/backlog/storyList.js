@@ -5,11 +5,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
-var bs = require('react-bootstrap');
 var config = require('./../common/config');
 var constant = require('./../common/constant');
-var Button = bs.Button;
-var Well = bs.Well;
 var LIST = require('./../common/customerList');
 var ReleaseSelect = LIST.ReleaseSelect;
 
@@ -97,8 +94,8 @@ var StoryList = React.createClass({
             <div>
                 <label>Release :</label>
                 <ReleaseSelect value={this.state.release} onChange={this.releaseChange}></ReleaseSelect>
-                <Button onClick={this.filter}>Filter: </Button>
-                <Button onClick={this.loadData}>Reset: </Button>
+                <button onClick={this.filter}>Filter:</button>
+                <button onClick={this.loadData}>Reset:</button>
                 {this.state.items.map(this.renderLi)}
             </div>
         )
@@ -109,11 +106,11 @@ var StoryItem = React.createClass({
     render: function () {
         return (
             <div>
-                <Well className="storyItem">
+                <div className="storyItem">
                     <a href={'../story/story.html?id=' + this.props.story.storyId} target="_blank">
-                        <Button bsStyle="default" onClick={this.goEditPage}>
+                        <button bsStyle="default" onClick={this.goEditPage}>
                             {this.props.story.storyId}
-                        </Button>
+                        </button>
                     </a>
                     &nbsp;&nbsp;
                     {this.props.story.schedule.releaseName}
@@ -123,7 +120,7 @@ var StoryItem = React.createClass({
                     <div className="right">
                         {this.props.story.basic.name}
                     </div>
-                </Well>
+                </div>
             </div>
         )
     }

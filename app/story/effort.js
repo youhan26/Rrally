@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-
 var MD = require('material-ui');
 var Table = MD.Table;
 var TableHeader = MD.TableHeader;
@@ -24,6 +23,7 @@ var Effort = React.createClass({
     },
     render: function () {
         var style = {
+            'minHeight': '200px'
         };
         return (
             <div style={style}>

@@ -4,8 +4,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var firebase = require('firebase');
-var bs = require('react-bootstrap');
-var BUTTON = bs.Button;
 var constant = require('./../common/config');
 
 var BugChange = React.createClass({
@@ -43,7 +41,7 @@ var BugChange = React.createClass({
         return (
             <div>
                 <h2>change bug module</h2>
-                <BUTTON onClick={this.change}>Change</BUTTON>
+                <button onClick={this.change}>Change</button>
             </div>
         )
     }

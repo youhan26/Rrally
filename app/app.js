@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var ReactBootstrap = require('react-bootstrap');
 var marked = require('marked');
 
 // tutorial10.js

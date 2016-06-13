@@ -4,17 +4,13 @@
 // react
 'use strict';
 require('./../node_modules/react/react');
-require('./../node_modules/react-bootstrap/dist/react-bootstrap.min.js');
-
-//firebase
 require('./../node_modules/firebase/lib/firebase-web');
+require('./../app/common/api');
 
 //material ui
 require('./../node_modules/material-ui');
 require("./../node_modules/react-tap-event-plugin");
 
-//react grid layout
-require('./../node_modules/react-grid-layout');
 
 //utils
 require('./../app/utils/dateFormat');

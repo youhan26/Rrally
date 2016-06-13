@@ -4,8 +4,8 @@
 // react
 'use strict';
 require('./../node_modules/react/react');
-//firebase
 require('./../node_modules/firebase/lib/firebase-web');
+require('./../app/common/api');
 
 //material ui
 require('./../node_modules/material-ui');

@@ -4,8 +4,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var firebase = require('firebase');
-var bs = require('react-bootstrap');
-var BUTTON = bs.Button;
 var constant = require('./../common/config');
 
 var Release = React.createClass({
@@ -44,7 +42,7 @@ var Release = React.createClass({
         return (
             <div>
                 <h2>New Release</h2>
-                <BUTTON onClick={this.add}>New Release</BUTTON>
+                <button onClick={this.add}>New Release</button>
             </div>
         )
     }
