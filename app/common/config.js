@@ -4,7 +4,7 @@
 
 (function () {
 
-    var host = 'https://rally-test.firebaseio.com';
+    var host = 'https://mimikiyru.firebaseio.com';
 
     var constant = {
         host: host,
