@@ -4,12 +4,14 @@
 
 (function () {
 
+    var host = 'https://rally-test.firebaseio.com';
+
     var constant = {
-        host: 'https://mimikiyru.firebaseio.com',
-        story: 'https://mimikiyru.firebaseio.com/story',
-        index: 'https://mimikiyru.firebaseio.com/index',
-        release: 'https://mimikiyru.firebaseio.com/release',
-        bug: 'https://mimikiyru.firebaseio.com/bug'
+        host: host,
+        story: host + '/story',
+        index: host + '/index',
+        release: host + '/release',
+        bug: host + '/bug'
     };
 
     module.exports = constant;

@@ -142,12 +142,16 @@
     }
 
     function commondel(ref, key, value) {
-        if (value) {
-            return ref.orderByChild(key).equalTo(value).remove();
-        } else {
-            console.log("id shouldn't be none");
-            return null;
-        }
+        return new Promise(function (resolve, reject) {
+            ref.orderByChild(key).equalTo(value).once('value').then(function (data) {
+                var index = Object.getOwnPropertyNames(data.val())[0];
+                ref.child(index).remove().then(function (arguments) {
+                    resolve(arguments);
+                }).then(function () {
+                    reject('save error');
+                });
+            });
+        });
     }
 
     /**
@@ -161,6 +165,7 @@
             ref.once('value').then(function (data) {
                 var list = Object.getOwnPropertyNames(data.val());
                 var index = parseInt(list[list.length - 2]) + 1;
+                source.id = index;
                 ref.child(index).set(source).then(function (arguments) {
                     resolve(arguments);
                 }).then(function () {

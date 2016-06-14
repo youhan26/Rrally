@@ -12,6 +12,8 @@ require('./../node_modules/material-ui');
 require("./../node_modules/react-tap-event-plugin");
 
 //app.js
+require('./../app/manage/project');
+require('./../app/manage/member');
 require('./../app/manage/manage');
 
 //common
