@@ -79,7 +79,7 @@
     function updateRelease(data) {
         return new Promise(function (resolve, reject) {
             var s = data.releaseName;
-            var index = parseInt(s.substr(s.length - 3, s.length - 1)) + 1;
+            var index = parseInt(s.substr(s.length - 2, s.length - 1)) + 1;
             commongetbychild(releaseref, index).then(function (res) {
                 var newrelease = res.val();
                 if (!newrelease) {
