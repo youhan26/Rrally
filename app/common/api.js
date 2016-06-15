@@ -177,6 +177,7 @@
 
     module.exports = {
         project: project,
-        member: member
+        member: member,
+        release: release
     };
 })();

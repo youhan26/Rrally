@@ -10,6 +10,7 @@ var LIST = require('./../common/customerList');
 var ProjectList = LIST.ProjectList;
 var ReleaseSelect = LIST.ReleaseSelect;
 var Effort = require('./effort');
+var api = require('./../common/api');
 
 var StoryList = React.createClass({
     getInitialState: function () {
@@ -76,7 +77,7 @@ var StoryList = React.createClass({
                 }
             }
         }
-        var list = []
+        var list = [];
         for (var i in result) {
             list.push({
                 id: result[i].id,
@@ -88,21 +89,22 @@ var StoryList = React.createClass({
         return list;
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase(constant.story);
-        this.ref = new Firebase(constant.host);
-        this.ref.child('member').once('value', function (snap) {
-            this.members = snap.val();
-            this.ref.child('index').child('releaseIndex').once('value', function (snap) {
-                this.ref.child('release').child(snap.val() - 1).once('value', function (tt) {
-                    var value = tt.val();
-                    if (value) {
-                        this.curRelease = value.id;
-                        this.curReleaseName = value.name;
-                    }
-                    this.loadData();
-                }.bind(this));
-            }.bind(this));
-        }.bind(this));
+        var me = this;
+        me.firebaseRef = new Firebase(constant.story);
+        me.ref = new Firebase(constant.host);
+        api.member.get().then(function (snap) {
+            me.members = snap.val();
+            me.updateReleaseByProject();
+        });
+    },
+    updateReleaseByProject: function () {
+        var me = this;
+        api.project.get(me.curProject).then(function (snap) {
+            var value = snap.val();
+            var release = value[Object.getOwnPropertyNames(value)[0]].release;
+            me.curRelease = release;
+            me.loadData();
+        });
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
@@ -139,7 +141,7 @@ var StoryList = React.createClass({
     },
     projectChange: function (value) {
         this.curProject = value;
-        this.loadData();
+        this.updateReleaseByProject();
     },
     releaseChange: function (value) {
         this.curRelease = value;
