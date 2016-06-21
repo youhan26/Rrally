@@ -7,6 +7,8 @@ var ReactDOM = require('react-dom');
 var Firebase = require('firebase');
 var constant = require('./../common/config');
 var List = require('./../common/customerList');
+var api = require('./../common/api');
+var supp = require('./../common/supporting');
 var Project = List.ProjectList;
 
 var MD = require('material-ui');
@@ -26,43 +28,24 @@ var StoryList = React.createClass({
         }
     },
     componentWillMount: function () {
-        this.firebaseRef = new Firebase(constant.story);
-        this.projectRef = new Firebase(constant.host + '/project');
-        this.memberRef = new Firebase(constant.host + '/member');
-        this.style = {
+        var me = this;
+        me.firebaseRef = new Firebase(constant.story);
+        me.style = {
             width: '35%'
         };
-        this.style2 = {
+        me.style2 = {
             width: '15%'
         };
-        this.curProject = 999;
-        this.loadProjectData(true);
-    },
-    loadProjectData: function (loadData) {
-        this.projectRef.once('value', function (snap) {
-            this.projects = snap.val();
-            this.memberRef.once('value', function (snap) {
-                this.members = snap.val();
-                if (loadData) {
-                    this.loadData();
-                }
-            }.bind(this));
-        }.bind(this));
+        me.curProject = 999;
+        supp.load.then(function () {
+            me.loadData();
+        });
     },
     getProjectById: function (id) {
-        return this.getDataById(this.projects, id);
+        return supp.getNameById('project', id);
     },
     getPmById: function (id) {
-        return this.getDataById(this.members, id);
-    },
-    getDataById: function (list, id) {
-        if (id) {
-            for (var i in list) {
-                if (list[i].id === parseInt(id)) {
-                    return list[i].name;
-                }
-            }
-        }
+        return supp.getNameById('member', id);
     },
     loadData: function () {
         this.firebaseRef.once('value', function (snap) {
@@ -97,7 +80,6 @@ var StoryList = React.createClass({
     },
     componentWillUnmount: function () {
         this.firebaseRef.off();
-        this.projectRef.off();
     },
     up: function (data) {
         var list = this.state.items;

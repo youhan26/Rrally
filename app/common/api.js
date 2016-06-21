@@ -9,6 +9,7 @@
     var projectRef = ref.child('project');
     var memberRef = ref.child('member');
     var releaseref = ref.child('release');
+    var bugref = ref.child('bug');
 
 
     var project = {
@@ -31,6 +32,14 @@
         getnext: releasegetnext,
         save: releasesave
     };
+
+    var bug = {
+        get: bugget
+    };
+
+    function bugget(id) {
+        return commonget(bugref, 'id', id);
+    }
 
     function releaseget(id) {
         return commonget(releaseref, 'id', id)

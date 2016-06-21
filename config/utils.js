@@ -6,6 +6,7 @@
 require('./../node_modules/react/react');
 require('./../node_modules/firebase/lib/firebase-web');
 require('./../app/common/api');
+require('./../app/common/supporting');
 
 
 require('./../app/utils/addChild');
