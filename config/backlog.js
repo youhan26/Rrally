@@ -17,3 +17,7 @@ require('./../app/backlog/backlog');
 
 //common
 require('./../app/common/config');
+
+//widgets
+require('./../app/widgets/sortable/Sortable.min');
+require('./../app/widgets/sortable/react-sortable-mixin');

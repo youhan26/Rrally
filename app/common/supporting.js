@@ -22,16 +22,19 @@
             api.member.get().then(function (snap) {
                 me.member = snap.val();
                 isload();
-            }).then(function (reason) {
-                reject('load error from supporting data member', reason);
             });
+            //TODO problem will jump into and report a error
+            // .then(function (reason) {
+            //     reject('load error from supporting data member', reason);
+            // })
 
             api.project.get().then(function (snap) {
                 me.project = snap.val();
                 isload();
-            }).then(function (reason) {
-                reject('load error from supporting data project', reason);
             });
+            // .then(function (reason) {
+            //     reject('load error from supporting data project', reason);
+            // })
 
             function isload() {
                 if (++index === max) {
@@ -48,11 +51,11 @@
         if (!dataset) {
             throw Error('no such module supporting data');
         }
-        if (!id) {
-            throw Error('no id from supporting data');
+        if (!id || typeof (parseInt(id)) !== 'number') {
+            return '';
         }
         for (var i = 0, ii = dataset.length; i < ii; i++) {
-            if (dataset[i].id === id) {
+            if (dataset[i] && dataset[i].id === id) {
                 return dataset[i].name || dataset[i];
             }
         }

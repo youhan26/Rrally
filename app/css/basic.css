@@ -18,3 +18,14 @@ html, textarea, button, label, h1, h2, h3, h4, span, input, div, td, th {
 a:link, a:visited, a:hover, a:focus {
     text-decoration: none; /*超链接无下划线*/
 }
+
+.my-handle {
+    font-size: 20px;
+    cursor: move;
+    cursor: -webkit-grabbing;
+}
+
+.ghost {
+    opacity: .5;
+    background: #C8EBFB;
+}
