@@ -1,0 +1,47 @@
+.story-list {
+    vertical-align: top;
+    height: 40px;
+    margin-bottom: 3px;
+}
+
+.story-list-gray {
+    vertical-align: top;
+    height: 40px;
+    margin-bottom: 3px;
+    background-color: lightgrey;
+}
+
+.story-list > div, .story-list-gray > div {
+    display: inline-block;
+}
+
+.story-num {
+    width: 10%;
+}
+
+.story-name {
+    width: 40%;
+}
+
+.story-plan {
+    width: 20%;
+}
+
+.story-project {
+    width: 30%;
+}
+
+.my-handle {
+    font-size: 20px;
+    cursor: move;
+    cursor: -webkit-grabbing;
+}
+
+.ghost {
+    opacity: .5;
+    background: #C8EBFB;
+}
+
+.loading {
+
+}

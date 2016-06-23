@@ -19,22 +19,24 @@ var Table = MD.Table;
 var TableHeader = MD.TableHeader;
 var TableRow = MD.TableRow;
 var TableHeaderColumn = MD.TableHeaderColumn;
-var TableRowColumn = MD.TableRowColumn;
-var TableBody = MD.TableBody;
-var RaisedButton = MD.RaisedButton;
+var Snackbar = MD.Snackbar;
 
 
 var StoryList = React.createClass({
     getInitialState: function () {
-        this.dragEl = null;
-        this.dragItem = null;
         return {
-            items: []
+            items: [],
+            open: false
         }
     },
-    loadData: function () {
+    loadData: function (showAlert) {
+        var me = this;
         this.firebaseRef.once('value', function (snap) {
             var data = snap.val();
+            //for the drag
+            me.dataset = data;
+            //store the temp drag data
+            me.tempstore = [];
             var items = [];
             for (var i in data) {
                 if (data[i].schedule.release == ''
@@ -61,17 +63,16 @@ var StoryList = React.createClass({
             this.setState({
                 items: items
             });
+            if (showAlert) {
+                this.setState({
+                    open: true
+                });
+            }
         }.bind(this));
     },
     componentWillMount: function () {
         var me = this;
         me.firebaseRef = new Firebase(constant.story);
-        me.style = {
-            width: '35%'
-        };
-        me.style2 = {
-            width: '15%'
-        };
         me.curProject = 999;
         supp.load.then(function () {
             me.loadData();
@@ -84,15 +85,64 @@ var StoryList = React.createClass({
         this.curProject = value;
         this.loadData();
     },
-    _updateDrag: function (el, item) {
-        this.dragEl = el;
-        this.dragItem = item;
+    _update: function () {
+        var me = this;
+        var list = me.tempstore;
+        var len = list.length;
+        var index = 0;
+        for (var i = 0, ii = len; i < ii; i++) {
+            me.firebaseRef.child(list[i].storyId).update({
+                index: list[i].index
+            }, function () {
+                if (++index === len) {
+                    me.loadData(true);
+                    console.log('succ');
+                }
+            });
+        }
     },
-    renderLi: function (item, index) {
-        return (
-            <SortListItem item={item} index={index} key={item.id} dragEl={this.dragEl}
-                          updateDrag={this._updateDrag}></SortListItem>
-        );
+    _refresh: function (f, t) {
+        var me = this;
+        var from = me.dataset[f],
+            to = me.dataset[t],
+            flagf = false,
+            flagt = false;
+        var list = me.tempstore;
+        var t = from.index;
+        from.index = to.index;
+        to.index = t;
+        for (var i = 0, ii = list.length; i < ii; i++) {
+            if (list[i].storyId === from.storyId) {
+                list[i].index = from.index;
+                flagf = true;
+            }
+            if (list[i].storyId === to.storyId) {
+                list[i].index = to.index;
+                flagt = true;
+            }
+        }
+        if (!flagf) {
+            me.tempstore.push({
+                storyId: from.storyId,
+                index: from.index
+            });
+        }
+        if (!flagt) {
+            me.tempstore.push({
+                storyId: to.storyId,
+                index: to.index
+            });
+        }
+        var temp = [];
+        for (var i = 0, ii = list.length; i < ii; i++) {
+            temp.push(list[i].index);
+        }
+        console.log(temp.toString());
+    },
+    onRequestClose: function () {
+        this.setState({
+            open: false
+        });
     },
     render: function () {
         return (
@@ -109,87 +159,68 @@ var StoryList = React.createClass({
                             <TableHeaderColumn>Operation</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
-                    <TableBody displayRowCheckbox={false} stripedRows={true}>
-                        {this.state.items.map(this.renderLi)}
-                    </TableBody>
                 </Table>
+                <SortList items={this.state.items} update={this._update} refresh={this._refresh}></SortList>
+                <Snackbar
+                    open={this.state.open}
+                    message="save succ"
+                    autoHideDuration={1000}
+                    onRequestClose={this.onRequestClose}
+                />
             </div>
         )
     }
 });
 
-var SortListItem = React.createClass({
-    getProjectById: function (id) {
+var SortList = React.createClass({
+    _getProjectById: function (id) {
         return supp.getNameById('project', id);
     },
-    getPmById: function (id) {
+    _getPmById: function (id) {
         return supp.getNameById('member', id);
     },
-    _updateDrag: function (el) {
-        this.props.updateDrag(el, this.props.item);
-    },
-    componentDidMount: function () {
+    mixins: [SortableMixin],
+    componentWillMount: function () {
         var me = this;
-        var el = this.getDOMNode();
-        el.draggable = true;
-        el.addEventListener('dragstart', function (e) {
-            var dragEl = e.target; // Remembering an element that will be moved
-
-            // Limiting the movement type
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('Custom', JSON.stringify(me.props.item));
-
-            me._updateDrag(dragEl);
-
-            // Subscribing to the events at dnd
-            el.addEventListener('dragover', me._onDragOver, false);
-            el.addEventListener('dragend', me._onDragEnd, false);
-
-            setTimeout(function () {
-                dragEl.classList.add('ghost');
-            }, 0)
-
-        }, false);
+        me.sortableOptions = {
+            me: me,
+            ghostClass: 'ghost',
+            onMove: function (e) {
+                var from = e.dragged.firstChild.textContent,
+                    to = e.related.firstChild.textContent;
+                me.props.refresh(from, to) && this.options.me.props.refresh(from, to);
+            },
+            onEnd: function (evt) {
+                me.props.update() && this.options.me.props.update();
+            }
+        };
     },
-    _onDragOver: function (e) {
-        debugger;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-
-        // var target = e.target;
-        // if (target && target !== dragEl && target.nodeName == 'LI') {
-        //     // Sorting
-        //     rootEl.insertBefore(dragEl, target.nextSibling || target);
-        // }
-    },
-    _onDragEnd: function (e) {
-        debugger;
-        e.preventDefault();
-        var dragEl = e.target;
-        dragEl.classList.remove('ghost');
-        el.removeEventListener('dragover', _onDragOver, false);
-        el.removeEventListener('dragend', _onDragEnd, false);
-        // Notification about the end of sorting
-        // onUpdate(dragEl);
+    _renderLi: function (item, index) {
+        return (
+            <div className={index%2==0 ? 'story-list' : 'story-list-gray'} key={item.id}>
+                <div className="story-num">
+                    <a href={'../story/story.html?id=' + item.storyId} target="_blank">
+                        {item.storyId}
+                    </a>
+                </div>
+                <div className="story-name">
+                    {item.basic.name}
+                </div>
+                <div className="story-plan">
+                    {item.status.planEst}
+                </div>
+                <div className="story-project">
+                    {this._getProjectById(item.schedule.project) || '无'}
+                    / {this._getPmById(item.basic.pm) || '无'}
+                </div>
+            </div>
+        )
     },
     render: function () {
         return (
-            <TableRow hoverable={true}>
-                <TableRowColumn>
-                    <a href={'../story/story.html?id=' + this.props.item.storyId} target="_blank">
-                        {this.props.item.storyId}
-                    </a>
-                </TableRowColumn>
-                <TableRowColumn style={this.style}>{this.props.item.basic.name}</TableRowColumn>
-                <TableRowColumn style={this.style2}>{this.props.item.status.planEst}</TableRowColumn>
-                <TableRowColumn>
-                    {this.getProjectById(this.props.item.schedule.project) || '无'}
-                    / {this.getPmById(this.props.item.basic.pm) || '无'}
-                </TableRowColumn>
-                <TableRowColumn>
-                    <i className="fa fa-sort my-handle" aria-hidden="true"></i>
-                </TableRowColumn>
-            </TableRow>
+            <div>
+                {this.props.items.map(this._renderLi)}
+            </div>
         )
     }
 });
