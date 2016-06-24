@@ -18,6 +18,7 @@ var TableHeader = MD.TableHeader;
 var TableRow = MD.TableRow;
 var TableHeaderColumn = MD.TableHeaderColumn;
 var Snackbar = MD.Snackbar;
+var RaisedButton = MD.RaisedButton;
 
 
 var StoryList = React.createClass({
@@ -94,6 +95,9 @@ var StoryList = React.createClass({
                     me.loadData(true);
                 }
             });
+        }
+        if (list.length <= 0) {
+            me.loadData(true);
         }
     },
     _refresh: function (f, t) {
@@ -190,6 +194,12 @@ var SortList = React.createClass({
             }
         };
     },
+    _del: function (item) {
+        var me = this;
+        api.story.del(item.storyId).then(function () {
+            me.props.update();
+        });
+    },
     _renderLi: function (item, index) {
         return (
             <div className={index%2==0 ? 'story-list' : 'story-list-gray'} key={item.id}>
@@ -207,6 +217,9 @@ var SortList = React.createClass({
                 <div className="story-project">
                     {this._getProjectById(item.schedule.project) || '无'}
                     / {this._getPmById(item.basic.pm) || '无'}
+                </div>
+                <div className="story-operation">
+                    <RaisedButton label="删除" onClick={this._del.bind(this,item)}></RaisedButton>
                 </div>
             </div>
         )

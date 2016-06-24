@@ -40,8 +40,13 @@
 
     var story = {
         get: storyget,
-        update: storyupdate
+        update: storyupdate,
+        del: storydel
     };
+
+    function storydel(storyid) {
+        return commondelbychid(storyref, storyid);
+    }
 
     function storyget(storyid) {
         return commongetbychild(storyref, storyid);
@@ -182,6 +187,10 @@
                 });
             });
         });
+    }
+
+    function commondelbychid(ref, child) {
+        return ref.child(child).remove();
     }
 
     /**
