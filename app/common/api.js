@@ -10,6 +10,7 @@
     var memberRef = ref.child('member');
     var releaseref = ref.child('release');
     var bugref = ref.child('bug');
+    var storyref = ref.child('story');
 
 
     var project = {
@@ -36,6 +37,19 @@
     var bug = {
         get: bugget
     };
+
+    var story = {
+        get: storyget,
+        update: storyupdate
+    };
+
+    function storyget(storyid) {
+        return commongetbychild(storyref, storyid);
+    }
+
+    function storyupdate(storyid, data) {
+        return commonupdatebychid(storyref, storyid, data);
+    }
 
     function bugget(id) {
         return commonget(bugref, 'id', id);
@@ -134,7 +148,10 @@
     }
 
     function commongetbychild(ref, child) {
-        return ref.child(child).once('value')
+        if (child) {
+            return ref.child(child).once('value');
+        }
+        return ref.once('value');
     }
 
     function commonupdate(ref, id, source) {
@@ -148,6 +165,10 @@
                 });
             });
         });
+    }
+
+    function commonupdatebychid(ref, child, data) {
+        return ref.child(child).update(data);
     }
 
     function commondel(ref, key, value) {
@@ -187,6 +208,7 @@
     module.exports = {
         project: project,
         member: member,
-        release: release
+        release: release,
+        story: story
     };
 })();

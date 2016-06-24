@@ -4,8 +4,6 @@
 'use strict';
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Firebase = require('firebase');
-var constant = require('./../common/config');
 var List = require('./../common/customerList');
 var api = require('./../common/api');
 var supp = require('./../common/supporting');
@@ -31,7 +29,7 @@ var StoryList = React.createClass({
     },
     loadData: function (showAlert) {
         var me = this;
-        this.firebaseRef.once('value', function (snap) {
+        api.story.get().then(function (snap) {
             var data = snap.val();
             //for the drag
             me.dataset = data;
@@ -40,8 +38,8 @@ var StoryList = React.createClass({
             var items = [];
             for (var i in data) {
                 if (data[i].schedule.release == ''
-                    && (this.curProject === 999 ||
-                    (data[i].schedule.project.toString() == this.curProject.toString()))) {
+                    && (me.curProject === 999 ||
+                    (data[i].schedule.project.toString() == me.curProject.toString()))) {
                     items.push(data[i]);
                 }
             }
@@ -60,26 +58,24 @@ var StoryList = React.createClass({
                     }
                 }
             });
-            this.setState({
+            me.setState({
                 items: items
             });
             if (showAlert) {
-                this.setState({
+                me.setState({
                     open: true
                 });
             }
-        }.bind(this));
+        });
     },
     componentWillMount: function () {
         var me = this;
-        me.firebaseRef = new Firebase(constant.story);
         me.curProject = 999;
         supp.load.then(function () {
             me.loadData();
         });
     },
     componentWillUnmount: function () {
-        this.firebaseRef.off();
     },
     projectChange: function (value) {
         this.curProject = value;
@@ -91,12 +87,11 @@ var StoryList = React.createClass({
         var len = list.length;
         var index = 0;
         for (var i = 0, ii = len; i < ii; i++) {
-            me.firebaseRef.child(list[i].storyId).update({
+            api.story.update(list[i].storyId, {
                 index: list[i].index
-            }, function () {
+            }).then(function () {
                 if (++index === len) {
                     me.loadData(true);
-                    console.log('succ');
                 }
             });
         }

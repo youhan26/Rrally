@@ -20,11 +20,14 @@ webpack-dev-server
 
 
 ### TODO
-- [ ] reflect data layer for backend -- api module(in progress)
+- [X] reflect data layer for backend
 - [ ] review story data structure
-- [ ] backlog drag and drop(in progress)
+- [X] backlog drag and drop
 - [ ] dashboard drag and drop
 - [X] supporting data
     * &nbsp;&nbsp;member
     * &nbsp;&nbsp;project
+    * &nbsp;&nbsp;release
+    * &nbsp;&nbsp;bug
+    * &nbsp;&nbsp;story
 - [ ] common error handler
