@@ -30,7 +30,7 @@ webpack-dev-server
     * &nbsp;&nbsp;release
     * &nbsp;&nbsp;bug
     * &nbsp;&nbsp;story
-- [ ] common error handler
+- [ ] common error handler and whole page event
 - [ ] test day color with day change
 - [ ] bug page
 - [ ] file upload and rich editor
