@@ -112,7 +112,7 @@
                 var newrelease = res.val();
                 if (!newrelease) {
                     newrelease = {
-                        id: new Date().getTime(),
+                        id: index,
                         name: 'Release ' + index
                     };
                     release.save(newrelease);
